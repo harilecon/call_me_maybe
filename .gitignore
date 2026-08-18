@@ -3,7 +3,7 @@ en.subject.txt
 __pycache__/
 *.py[codz]
 *$py.class
-
+.python-version
 # C extensions
 *.so
 
