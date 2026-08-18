@@ -61,7 +61,7 @@ def level_breaker(s: str) -> bool:
     return False
 
 
-
+ft_name = [ft['name'] for ft in ft_list]
 
 
 name = [x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]
@@ -144,29 +144,50 @@ if b:
 x = ',"parameters": {"'
 tokens += model.encode(x)[0].tolist()
 
+n = txt.split("\"")[3]
+if n not in ft_name:
+    print("invalide name")
+
+else:
+    tokens += model.encode(", \"arguments\": {")[0].tolist()
+    t = ", \"arguments\": {"
+    txt += t
+    print(f"found {n}")
+
+    for j in ft_list:
+        if j['name'] == n:
+            x = j
+
+    # print(x)
+        par = x['parameters']
+        
+    for i in par:
+
+        print(i, par[i]['type'])
+        
 
 
 
 
 
-# recherche parametre
-txt += x
-print(txt)
-print("--------------------------------------")
-for _ in range(50):
-    log = model.get_logits_from_input_ids(tokens)
-    next = log.index(max(log))
-    # constrainte_name(log, name)
-    tokens.append(next)
-    txt += model.decode(next)
-    if level_breaker(txt):
-        print(txt)
-        print("--------------------------------------")
-        break
+# # recherche parametre
+# txt += x
+# print(txt)
+# print("--------------------------------------")
+# for _ in range(50):
+#     log = model.get_logits_from_input_ids(tokens)
+#     next = log.index(max(log))
+#     # constrainte_name(log, name)
+#     tokens.append(next)
+#     txt += model.decode(next)
+#     if level_breaker(txt):
+#         print(txt)
+#         print("--------------------------------------")
+#         break
 
-    if next == 92:
-        print(txt)
-        print("--------------------------------------")
-        break
-    print(txt)
-    print("--------------------------------------")
+#     if next == 92:
+#         print(txt)
+#         print("--------------------------------------")
+#         break
+#     print(txt)
+#     print("--------------------------------------")
