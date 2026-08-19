@@ -3,9 +3,11 @@ import sys
 import json
 import math
 import re
+# /home/tsitoand/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca/vocab.json
 
 
 model = Small_LLM_Model()
+vocab = model.get_path_to_vocab_file()
 
 def main(msg):
 
@@ -16,7 +18,7 @@ def main(msg):
 
 
 
-    print(model.get_path_to_vocab_file())
+    # print(model.get_path_to_vocab_file())
 
     name = []
 
@@ -60,13 +62,13 @@ def main(msg):
         return False
 
 
-    ft_name = [ft['name'] for ft in ft_list]
+    # ft_name = [ft['name'] for ft in ft_list]
 
 
-    name = [x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]
-    name = list(set(name))
-    name.append(1)
-    name += [1]
+    # name = [x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]
+    # name = list(set(name))
+    # name.append(1)
+    # name += [1]
 
 
 
@@ -76,32 +78,29 @@ def main(msg):
                 ids[i] = -math.inf
 
 
-    template = '{"name": "'
+    # # template = '{"name": "'
 
 
 
-    # recherche name
+    # # # recherche name
 
     tokens1  = model.encode(prompt)[0].tolist()
     tokens = tokens1
-    tokens += model.encode(template)[0].tolist()
+    # tokens += model.encode(template)[0].tolist()
 
-    txt = ""
-    txt += template
+    # # txt = ""
+    # # txt += template
 
-    b = False
+    # # b = False
 
 
-    with open("/home/tsitoand/Desktop/vocab.json", "r") as f:
+    with open("/home/tsitoand/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca/vocab.json", "r") as f:
         vocab = json.load(f)
 
-    number = [i for i in vocab if re.search("^[0-9\-\+.\,}]$" ,i)]
+    # number = [i for i in vocab if re.search("^[0-9\-\+.\,}]$" ,i)]
 
 
     def test1(tokens, txt, constraint):
-        # print("my test")
-        # print(model.decode(constraint))
-        # sys.exit(42)
 
         for _ in range(100):
             log = model.get_logits_from_input_ids(tokens)
@@ -109,7 +108,6 @@ def main(msg):
 
 
             # if constraint:
-            #     get_name(log, constraint)
             #     next = log.index(max(log))
             #     try:
             #         print("int vovertion")
@@ -123,6 +121,10 @@ def main(msg):
 
             # else:
             next = log.index(max(log))
+            if i == 11:
+                break
+            get_name(log, constraint)
+
             tokens.append(next)
             x = model.decode(next)
             txt += x
@@ -147,77 +149,79 @@ def main(msg):
         return (tokens, txt)
 
 
-    def test(tokens, txt, constraint):
-        for _ in range(10):
-            log = model.get_logits_from_input_ids(tokens)
-            # constrainte_name(log, name)
+    # def test(tokens, txt, constraint):
+    #     for _ in range(10):
+    #         log = model.get_logits_from_input_ids(tokens)
+    #         # constrainte_name(log, name)
 
 
-            get_name(log, constraint)
-            next = log.index(max(log))
-            tokens.append(next)
-            txt += model.decode(next)
-            if level_breaker(txt):
-                break
+    #         get_name(log, constraint)
+    #         next = log.index(max(log))
+    #         tokens.append(next)
+    #         txt += model.decode(next)
+    #         if level_breaker(txt):
+    #             break
 
-            if next == 1:
-                print("tapaka teto")
-                b = True
-                break
+    #         if next == 1:
+    #             print("tapaka teto")
+    #             b = True
+    #             break
 
-            print(txt)
-            print("--------------------------------------")
+    #         print(txt)
+    #         print("--------------------------------------")
 
-        # else:
-        #     print("Error infinite loop")
-        #     # sys.exit(-1)
 
-        return (tokens, txt)
 
-    tokens, txt =  test(tokens, txt, name)
-    # print(txt)
+    #     return (tokens, txt)
+
+    # tokens, txt =  test(tokens, txt, name)
+    # # print(txt)
     
-    if b:
-        print(txt)
+    # if b:
+    #     print(txt)
 
 
-    n = txt.split("\"")[3]
-    if n not in ft_name:
-        print("invalide name")
-        sys.exit(-2)
+    # n = txt.split("\"")[3]
+    # if n not in ft_name:
+    #     print("invalide name")
+    #     sys.exit(-2)
 
-    else:
-        print(f"found {n}")
+    # else:
+    #     print(f"found {n}")
 
-        for j in ft_list:
-            if j['name'] == n:
-                x = j
-        g = ', "parameters": {'
+    #     for j in ft_list:
+    #         if j['name'] == n:
+    #             x = j
+    #     g = ', "parameters": {'
 
-        tokens += model.encode(g)[0].tolist()
-        txt += g
+    #     tokens += model.encode(g)[0].tolist()
+    #     txt += g
 
-        par = x['parameters']
-        print(txt)
+    #     par = x['parameters']
+    #     print(txt)
 
-        constraint = {
-            'string': None,
-            'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,}\"]$" ,i)]
-            }
+    constraint = {
+        'string': None,
+        'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,}\"]$" ,i)]
+        }
 
-        tokens, txt = test1(tokens, txt, None)
-        # for i in par:
-        #     x = f'"{i}": '
-        #     tokens += model.encode(x)[0].tolist()
-        #     txt += x
-        # #     break
-        # # print(model.decode(tokens))
-        #     # print(i, constraint[par[i]['type']])
-        #     # sys.exit(44)
-        #     tokens, txt = test1(tokens, txt, constraint[par[i]['type']])
-        #     print(txt)
-        # # tokens, txt = test(tokens, txt, name)
-        return (json.loads(txt))
+    txt = '{"name": "fn_add_numbers", "parameters": {"a": '
+    tokens += model.encode('{"name": "fn_add_numbers", "parameters": {"a": ')[0].tolist()
+    print(model.decode(tokens))
+
+    tokens, txt = test1(tokens, txt, constraint['number'])
+    # for i in par:
+    #     x = f'"{i}": '
+    #     tokens += model.encode(x)[0].tolist()
+    #     txt += x
+    #     #     break
+    #     # print(model.decode(tokens))
+    #         # print(i, constraint[par[i]['type']])
+    #         # sys.exit(44)
+    #     tokens, txt = test1(tokens, txt, constraint[par[i]['type']])
+    print(txt)
+    #     # tokens, txt = test(tokens, txt, name)
+    #     return (json.loads(txt))
 
 
 if __name__ == '__main__':
