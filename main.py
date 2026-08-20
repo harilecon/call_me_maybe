@@ -138,8 +138,8 @@ def main(msg):
                 b = True
                 break
 
-            # print(txt)
-            # print("--------------------------------------")
+            print(txt)
+            print("--------------------------------------")
 
         return (tokens, txt)
 
@@ -190,7 +190,7 @@ def main(msg):
 
     for i in range(len(x)):
         # print(definition['parameters'][i]['type'])
-        tokens += model.encode(f'"{x[i]}": ')[0].tolist()
+        tokens += model.encode(f'"{x[i]}":')[0].tolist()
         txt += f'"{x[i]}": '
         tokens, txt = test1(tokens, txt, constraint['number'])
         if i < len(x):
