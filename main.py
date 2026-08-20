@@ -121,7 +121,8 @@ def main(msg):
 
             # else:
             next = log.index(max(log))
-            if i == 11:
+            if next == 11:
+                print("\n\n\nhello boy\n\n\n")
                 break
             get_name(log, constraint)
 
@@ -225,12 +226,13 @@ def main(msg):
 
 
 if __name__ == '__main__':
-    with open("src/function_calling_tests.json", "r") as test_file:
-        data = json.load(test_file)
+    # with open("src/function_calling_tests.json", "r") as test_file:
+    #     data = json.load(test_file)
 
-    d = []
-    for i in data:
-        i.update(main(i['prompt']))
-        d.append(i)
+    # d = []
+    # for i in data:
+    #     i.update(main(i['prompt']))
+    #     d.append(i)
 
-    print(d)
+    # print(d)
+    main("What is the sum of 123 and 987?")
