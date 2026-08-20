@@ -15,18 +15,12 @@ def main(msg):
         ft_list: list[dict] = json.load(f)
 
 
-
-
-
-    # print(model.get_path_to_vocab_file())
-
     name = []
-
 
 
     print(msg)
 
-    ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.0}}'
+    ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
 
     prompt = f"""
     Your task is to select the appropriate function from the available functions
@@ -36,7 +30,7 @@ def main(msg):
     {ft_list}
 
     Example:
-    User request: 'what's the sum of 2 and 3'
+    User request: 'what's the sum of 2,0 and 3,5'
     Output: {ex}
 
     User request: {msg}
@@ -45,30 +39,30 @@ def main(msg):
     """
 
 
-    def level_breaker(s: str) -> bool:
-        l = 0
+    # def level_breaker(s: str) -> bool:
+    #     l = 0
 
-        for i in s:
-            if i == '{':
-                l += 1
-            if i == '}':
-                l -= 1
-        if not s:
-            return False
+    #     for i in s:
+    #         if i == '{':
+    #             l += 1
+    #         if i == '}':
+    #             l -= 1
+    #     if not s:
+    #         return False
         
-        if l == 0:
-            print("our time as come")
-            return True
-        return False
+    #     if l == 0:
+    #         print("our time as come")
+    #         return True
+    #     return False
 
 
-    # ft_name = [ft['name'] for ft in ft_list]
+    ft_name = [ft['name'] for ft in ft_list]
 
 
-    # name = [x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]
-    # name = list(set(name))
-    # name.append(1)
-    # name += [1]
+    name = [x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]
+    name = list(set(name))
+    name.append(1)
+    name += [1]
 
 
 
@@ -78,7 +72,7 @@ def main(msg):
                 ids[i] = -math.inf
 
 
-    # # template = '{"name": "'
+    template = '{"name": "'
 
 
 
@@ -86,12 +80,12 @@ def main(msg):
 
     tokens1  = model.encode(prompt)[0].tolist()
     tokens = tokens1
-    # tokens += model.encode(template)[0].tolist()
+    tokens += model.encode(template)[0].tolist()
 
-    # # txt = ""
-    # # txt += template
+    txt = ""
+    txt += template
 
-    # # b = False
+    b = False
 
 
     with open("/home/tsitoand/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca/vocab.json", "r") as f:
@@ -104,113 +98,107 @@ def main(msg):
 
         for _ in range(100):
             log = model.get_logits_from_input_ids(tokens)
-            
 
-
-            # if constraint:
-            #     next = log.index(max(log))
-            #     try:
-            #         print("int vovertion")
-            #         int(model.decode(next))
-            #     except ValueError:
-            #         print("error convertion")
-            #         break
-            #     finally:
-            #         tokens.append(next)
-            #         txt += model.decode(next)
-
-            # else:
             next = log.index(max(log))
             if next == 11:
-                print("\n\n\nhello boy\n\n\n")
                 break
+
             get_name(log, constraint)
 
             tokens.append(next)
             x = model.decode(next)
             txt += x
-            # k = 0
-            # if "\"" in x:
-            #     k+=1
-            #     if k > 1:
-            #         break
-
-
-            if level_breaker(txt):
+            try:
+                json.loads(txt)
                 print(txt)
                 break
+            except Exception:
+                ...
 
-            # if next == 1:
-            #     print("tapaka teto")
-            #     b = True
-            #     break
-
-            print(txt)
-            print("--------------------------------------")
         return (tokens, txt)
 
 
-    # def test(tokens, txt, constraint):
-    #     for _ in range(10):
-    #         log = model.get_logits_from_input_ids(tokens)
-    #         # constrainte_name(log, name)
+    def test(tokens, txt, constraint):
+        for _ in range(10):
+            log = model.get_logits_from_input_ids(tokens)
+            # constrainte_name(log, name)
 
 
-    #         get_name(log, constraint)
-    #         next = log.index(max(log))
-    #         tokens.append(next)
-    #         txt += model.decode(next)
-    #         if level_breaker(txt):
-    #             break
+            get_name(log, constraint)
+            next = log.index(max(log))
+            tokens.append(next)
+            txt += model.decode(next)
+            try:
+                json.loads(txt)
+                break
+            except Exception:
+                ...
 
-    #         if next == 1:
-    #             print("tapaka teto")
-    #             b = True
-    #             break
+            if next == 1:
+                b = True
+                break
 
-    #         print(txt)
-    #         print("--------------------------------------")
+            # print(txt)
+            # print("--------------------------------------")
 
+        return (tokens, txt)
 
-
-    #     return (tokens, txt)
-
-    # tokens, txt =  test(tokens, txt, name)
-    # # print(txt)
+    tokens, txt =  test(tokens, txt, name)
+    # print(txt)
     
     # if b:
-    #     print(txt)
+    #     # print(txt)
 
 
-    # n = txt.split("\"")[3]
-    # if n not in ft_name:
-    #     print("invalide name")
-    #     sys.exit(-2)
+    n = txt.split("\"")[3]
+    if n not in ft_name:
+        print("invalide name")
+        sys.exit(-2)
 
-    # else:
-    #     print(f"found {n}")
+    else:
+        print(f"found {n}")
 
-    #     for j in ft_list:
-    #         if j['name'] == n:
-    #             x = j
-    #     g = ', "parameters": {'
+        for j in ft_list:
+            if j['name'] == n:
+                x = j
+        g = ', "parameters": {'
 
-    #     tokens += model.encode(g)[0].tolist()
-    #     txt += g
+        tokens += model.encode(g)[0].tolist()
+        txt += g
 
-    #     par = x['parameters']
-    #     print(txt)
+        par = x['parameters']
+        # print(txt)
 
     constraint = {
         'string': None,
         'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,}\"]$" ,i)]
         }
 
-    txt = '{"name": "fn_add_numbers", "parameters": {"a": '
-    tokens += model.encode('{"name": "fn_add_numbers", "parameters": {"a": ')[0].tolist()
-    print(model.decode(tokens))
+    # txt = '{"name": "fn_add_numbers", "parameters": {'
+    # tokens += model.encode('{"name": "fn_add_numbers", "parameters": {')[0].tolist()
 
-    tokens, txt = test1(tokens, txt, constraint['number'])
+
+    # chercher les parameter
+    for i in range(len(ft_list)):
+        if ft_list[i]['name'] == 'fn_add_numbers':
+            parameter = ft_list[i]['parameters']
+            # definition = ft_list[i]
+            break
+
+    # print(parameter)
+    x = [i for i in parameter]
+
+    for i in range(len(x)):
+        # print(definition['parameters'][i]['type'])
+        tokens += model.encode(f'"{x[i]}": ')[0].tolist()
+        txt += f'"{x[i]}": '
+        tokens, txt = test1(tokens, txt, constraint['number'])
+        if i < len(x):
+            tokens += model.encode(f', ')[0].tolist()
+            txt += f', '
+
+
+    # for i in r
     # for i in par:
     #     x = f'"{i}": '
     #     tokens += model.encode(x)[0].tolist()
@@ -220,7 +208,9 @@ def main(msg):
     #         # print(i, constraint[par[i]['type']])
     #         # sys.exit(44)
     #     tokens, txt = test1(tokens, txt, constraint[par[i]['type']])
-    print(txt)
+    # print(txt)
+    print(model.decode(tokens))
+    # sys.exit(0)
     #     # tokens, txt = test(tokens, txt, name)
     #     return (json.loads(txt))
 
@@ -235,4 +225,4 @@ if __name__ == '__main__':
     #     d.append(i)
 
     # print(d)
-    main("What is the sum of 123 and 987?")
+    main("What is the sum of minus on thousend and -9635?")
