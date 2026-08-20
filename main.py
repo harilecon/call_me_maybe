@@ -39,25 +39,7 @@ def main(msg):
     """
 
 
-    # def level_breaker(s: str) -> bool:
-    #     l = 0
-
-    #     for i in s:
-    #         if i == '{':
-    #             l += 1
-    #         if i == '}':
-    #             l -= 1
-    #     if not s:
-    #         return False
-        
-    #     if l == 0:
-    #         print("our time as come")
-    #         return True
-    #     return False
-
-
     ft_name = [ft['name'] for ft in ft_list]
-
 
     name = [x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]
     name = list(set(name))
@@ -66,7 +48,7 @@ def main(msg):
 
 
 
-    def get_name(ids: list[float], valid: list):
+    def mask_token(ids: list[float], valid: list):
         for i in range(len(ids)):
             if i not in valid:
                 ids[i] = -math.inf
@@ -78,12 +60,12 @@ def main(msg):
 
     # # # recherche name
 
-    tokens1  = model.encode(prompt)[0].tolist()
-    tokens = tokens1
+    prompt_encoded  = model.encode(prompt)[0].tolist()
+    tokens = prompt_encoded
     tokens += model.encode(template)[0].tolist()
 
-    txt = ""
-    txt += template
+    txt = []
+    txt += prompt_encoded
 
     b = False
 
@@ -94,7 +76,7 @@ def main(msg):
     # number = [i for i in vocab if re.search("^[0-9\-\+.\,}]$" ,i)]
 
 
-    def test1(tokens, txt, constraint):
+    def search_variable_number(tokens, txt: list, constraint):
 
         for _ in range(100):
             log = model.get_logits_from_input_ids(tokens)
@@ -103,14 +85,16 @@ def main(msg):
             if next == 11:
                 break
 
-            get_name(log, constraint)
+            mask_token(log, constraint)
 
             tokens.append(next)
-            x = model.decode(next)
-            txt += x
+            # x = model.decode(next)
+            txt.append(next)
             try:
-                json.loads(txt)
-                print(txt)
+                x = model.decode(txt)
+                print(x)
+                json.loads(x)
+                print(x)
                 break
             except Exception:
                 ...
@@ -118,18 +102,19 @@ def main(msg):
         return (tokens, txt)
 
 
-    def test(tokens, txt, constraint):
+    def search_name(tokens, txt: list, constraint):
         for _ in range(10):
             log = model.get_logits_from_input_ids(tokens)
             # constrainte_name(log, name)
 
 
-            get_name(log, constraint)
+            mask_token(log, constraint)
             next = log.index(max(log))
             tokens.append(next)
-            txt += model.decode(next)
+            txt.append(next)
             try:
-                json.loads(txt)
+                x = model.decode(txt)
+                json.loads(x)
                 break
             except Exception:
                 ...
@@ -138,19 +123,16 @@ def main(msg):
                 b = True
                 break
 
-            print(txt)
+            print(x)
             print("--------------------------------------")
 
         return (tokens, txt)
 
-    tokens, txt =  test(tokens, txt, name)
-    # print(txt)
-    
-    # if b:
-    #     # print(txt)
+    tokens, txt =  search_name(tokens, txt, name)
 
 
-    n = txt.split("\"")[3]
+    text = model.decode(txt)
+    n = text.split("\"")[3]
     if n not in ft_name:
         print("invalide name")
         sys.exit(-2)
@@ -164,10 +146,10 @@ def main(msg):
         g = ', "parameters": {'
 
         tokens += model.encode(g)[0].tolist()
-        txt += g
+        text += g
 
         par = x['parameters']
-        # print(txt)
+
 
     constraint = {
         'string': None,
@@ -191,11 +173,13 @@ def main(msg):
     for i in range(len(x)):
         # print(definition['parameters'][i]['type'])
         tokens += model.encode(f'"{x[i]}":')[0].tolist()
-        txt += f'"{x[i]}": '
-        tokens, txt = test1(tokens, txt, constraint['number'])
+        text += f'"{x[i]}": '
+        tokens, txt = search_variable_number(tokens, txt, constraint['number'])
         if i < len(x):
-            tokens += model.encode(f', ')[0].tolist()
-            txt += f', '
+            y = model.encode(f', ')[0].tolist()
+            tokens += y
+            txt = y
+            text += f', '
 
 
     # for i in r
@@ -207,11 +191,11 @@ def main(msg):
     #     # print(model.decode(tokens))
     #         # print(i, constraint[par[i]['type']])
     #         # sys.exit(44)
-    #     tokens, txt = test1(tokens, txt, constraint[par[i]['type']])
+    #     tokens, txt = search_variable_number(tokens, txt, constraint[par[i]['type']])
     # print(txt)
-    print(model.decode(tokens))
+    print(model.decode(txt))
     # sys.exit(0)
-    #     # tokens, txt = test(tokens, txt, name)
+    #     # tokens, txt = search_name(tokens, txt, name)
     #     return (json.loads(txt))
 
 
