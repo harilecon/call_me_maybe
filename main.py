@@ -54,47 +54,41 @@ def main(msg):
                 ids[i] = -math.inf
 
 
-    template = '{"name": "'
+    # template = '{"name": "'
+    template = model.encode('{"name": "')[0].tolist()
 
-
-
-    # # # recherche name
-
-    prompt_encoded  = model.encode(prompt)[0].tolist()
-    tokens = prompt_encoded
-    tokens += model.encode(template)[0].tolist()
 
     txt = []
-    txt += prompt_encoded
+    # # # recherche name
 
-    b = False
+    tokens = model.encode(prompt)[0].tolist()
+    txt += model.encode('{"name": "')[0].tolist()
+    tokens += txt
 
 
-    with open("/home/tsitoand/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca/vocab.json", "r") as f:
+
+    with open(model.get_path_to_vocab_file(), "r") as f:
         vocab = json.load(f)
 
-    # number = [i for i in vocab if re.search("^[0-9\-\+.\,}]$" ,i)]
 
 
     def search_variable_number(tokens, txt: list, constraint):
 
         for _ in range(100):
-            log = model.get_logits_from_input_ids(tokens)
+            ids = model.get_logits_from_input_ids(tokens)
 
-            next = log.index(max(log))
+            next = ids.index(max(ids))
             if next == 11:
                 break
+            if constraint:
+                mask_token(ids, constraint)
 
-            mask_token(log, constraint)
-
-            tokens.append(next)
-            # x = model.decode(next)
             txt.append(next)
+            tokens.append(next)
             try:
                 x = model.decode(txt)
                 print(x)
                 json.loads(x)
-                print(x)
                 break
             except Exception:
                 ...
@@ -104,12 +98,11 @@ def main(msg):
 
     def search_name(tokens, txt: list, constraint):
         for _ in range(10):
-            log = model.get_logits_from_input_ids(tokens)
-            # constrainte_name(log, name)
+            ids = model.get_logits_from_input_ids(tokens)
 
 
-            mask_token(log, constraint)
-            next = log.index(max(log))
+            mask_token(ids, constraint)
+            next = ids.index(max(ids))
             tokens.append(next)
             txt.append(next)
             try:
@@ -124,31 +117,20 @@ def main(msg):
                 break
 
             print(x)
-            print("--------------------------------------")
 
         return (tokens, txt)
 
     tokens, txt =  search_name(tokens, txt, name)
 
+    # for j in ft_list:
+    #     if j['name'] == n:
+    #         x = j
+    parameter = model.encode(', "parameters": {')[0].tolist()
 
-    text = model.decode(txt)
-    n = text.split("\"")[3]
-    if n not in ft_name:
-        print("invalide name")
-        sys.exit(-2)
+    tokens += parameter
+    txt += parameter
 
-    else:
-        print(f"found {n}")
-
-        for j in ft_list:
-            if j['name'] == n:
-                x = j
-        g = ', "parameters": {'
-
-        tokens += model.encode(g)[0].tolist()
-        text += g
-
-        par = x['parameters']
+    # par = x['parameters']
 
 
     constraint = {
@@ -173,30 +155,18 @@ def main(msg):
     for i in range(len(x)):
         # print(definition['parameters'][i]['type'])
         tokens += model.encode(f'"{x[i]}":')[0].tolist()
-        text += f'"{x[i]}": '
-        tokens, txt = search_variable_number(tokens, txt, constraint['number'])
-        if i < len(x):
+        txt += model.encode(f'"{x[i]}": ')[0].tolist()
+        # tokens, txt = search_variable_number(tokens, txt, constraint['number'])
+        tokens, txt = search_variable_number(tokens, txt, None)
+        # print(f"back on the loop {model.decode(txt)}")
+        if i < len(x) - 1:
+            print('hello')
             y = model.encode(f', ')[0].tolist()
             tokens += y
-            txt = y
-            text += f', '
+            txt += y
 
-
-    # for i in r
-    # for i in par:
-    #     x = f'"{i}": '
-    #     tokens += model.encode(x)[0].tolist()
-    #     txt += x
-    #     #     break
-    #     # print(model.decode(tokens))
-    #         # print(i, constraint[par[i]['type']])
-    #         # sys.exit(44)
-    #     tokens, txt = search_variable_number(tokens, txt, constraint[par[i]['type']])
-    # print(txt)
     print(model.decode(txt))
-    # sys.exit(0)
-    #     # tokens, txt = search_name(tokens, txt, name)
-    #     return (json.loads(txt))
+
 
 
 if __name__ == '__main__':
@@ -209,4 +179,4 @@ if __name__ == '__main__':
     #     d.append(i)
 
     # print(d)
-    main("What is the sum of minus on thousend and -9635?")
+    main("What is the sum of 265 and -345?")
