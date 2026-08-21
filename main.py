@@ -92,9 +92,34 @@ def main(msg):
                 break
             except Exception:
                 ...
-
+            
         return (tokens, txt)
 
+
+
+    # def search_variable_name(tokens, txt: list, constraint):
+
+    #     for _ in range(10):
+    #         ids = model.get_logits_from_input_ids(tokens)
+
+    #         next = ids.index(max(ids))
+    #         if next == 1:
+    #             break
+    #         if constraint:
+    #             mask_token(ids, constraint)
+
+    #         txt.append(next)
+    #         tokens.append(next)
+    #         try:
+    #             x = model.decode(txt)
+    #             print(x)
+    #             return(json.loads(x))
+    #             break
+    #         except Exception:
+    #             print("merde on remet ca")
+    #             ...
+
+    #     return (tokens, txt)
 
     def search_name(tokens, txt: list, constraint):
         for _ in range(10):
@@ -123,10 +148,9 @@ def main(msg):
     tokens, txt =  search_name(tokens, txt, name)
 
     # for j in ft_list:
-    #     if j['name'] == n:
+    #     if j['name'] == name:
     #         x = j
     parameter = model.encode(', "parameters": {')[0].tolist()
-
     tokens += parameter
     txt += parameter
 
@@ -150,33 +174,40 @@ def main(msg):
             break
 
     # print(parameter)
-    x = [i for i in parameter]
+    type_parameter = [i for i in parameter]
 
-    for i in range(len(x)):
-        # print(definition['parameters'][i]['type'])
-        tokens += model.encode(f'"{x[i]}":')[0].tolist()
-        txt += model.encode(f'"{x[i]}": ')[0].tolist()
+    print(f"merde on en est la {len(type_parameter)}")
+    for i in range(len(type_parameter)):
+        print(type_parameter[i])
+        tokens += model.encode(f'"{type_parameter[i]}":')[0].tolist()
+        txt += model.encode(f'"{type_parameter[i]}": ')[0].tolist()
         # tokens, txt = search_variable_number(tokens, txt, constraint['number'])
         tokens, txt = search_variable_number(tokens, txt, None)
-        # print(f"back on the loop {model.decode(txt)}")
-        if i < len(x) - 1:
-            print('hello')
+        try:
+            return json.loads(model.decode(txt))
+        except Exception:
+            ...
+
+        if i < len(type_parameter):
             y = model.encode(f', ')[0].tolist()
             tokens += y
             txt += y
 
-    print(model.decode(txt))
 
-
+    return json.loads(model.decode(txt))
 
 if __name__ == '__main__':
-    # with open("src/function_calling_tests.json", "r") as test_file:
-    #     data = json.load(test_file)
+    with open("src/function_calling_tests.json", "r") as test_file:
+        data = json.load(test_file)
 
-    # d = []
-    # for i in data:
-    #     i.update(main(i['prompt']))
-    #     d.append(i)
+    d = []
+    for i in data:
+        i.update(main(i['prompt']))
+        print(i)
+        d.append(i)
 
-    # print(d)
-    main("What is the sum of 265 and -345?")
+    print(d)
+
+    with open("harimino.txt", "w") as f:
+        f.write(d)
+    # main("What is the sum of 265 and -345?")
