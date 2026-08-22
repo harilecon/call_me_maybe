@@ -39,7 +39,7 @@ def main(msg):
     """
 
 
-    ft_name = [ft['name'] for ft in ft_list]
+    # ft_name = [ft['name'] for ft in ft_list]
 
     name = [x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]
     name = list(set(name))
