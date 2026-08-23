@@ -26,6 +26,7 @@ class CallMeMaybe:
         self._prompt: list[int] = []
         self._constraint_name: list[int] = self._set_constraint_name()
         self.output: list[int] = []
+        self.separator = [self.llm_vocabulary[i] for i in self.llm_vocabulary if (i == "," or i == '",' or i == ')",')]
 
     def _set_constraint_name(self) -> None:
         all_token_name = [x for ft in self.ft_list for x in self.model.encode(ft['name'])[0].tolist()]
@@ -87,9 +88,8 @@ class CallMeMaybe:
                 self.mask_token(ids, constraint)
     
             next = ids.index(max(ids))
-            print(next, self.model.decode([next]))
-            if next == 11 or next == 497 or next == 11583:
-                if next == 11583:
+            if next in self.separator:
+                if next == self.model.encode("')\",'")[0].tolist()[0]:
                     self.put_value(')')
                 return None
 
@@ -97,8 +97,6 @@ class CallMeMaybe:
             self.output.append(next)
             try:
                 output = self.model.decode(self.output)
-                print("dans la matrice")
-                print(output)
                 return(json.loads(output))
             except Exception:
                 ...
@@ -116,6 +114,7 @@ class CallMeMaybe:
         name = self.search_name()
 
         for definition in self.ft_list:
+            print(f"\n\n\n{name}\n\n\n")
             if definition['name'] == name:
                 def_selected = definition
 
@@ -154,7 +153,7 @@ class CallMeMaybe:
                 elif k == 'string':
                     self.put_value('",')
 
-        print(self.model.decode(self.output))
+        # print(self.model.decode(self.output))
 
 
 def main():
@@ -165,15 +164,16 @@ def main():
     tab = []
 
     for f in call:
-        print(f)
         call_me.set_prompt(f)
-        print(call_me.solution())
+        call_me.solution()
+        f.update(call_me.solution())
         tab.append(f)
+        print(f)
 
     print(tab)
 
     with open("harimino.txt", "w") as f:
-        f.write(list(tab))
+        f.write(str(list(tab)))
 
 
 if __name__ == '__main__':
