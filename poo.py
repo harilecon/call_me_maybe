@@ -139,10 +139,12 @@ class CallMeMaybe:
         variable_len = len(variable)
         i = 0
         for key in def_selected['parameters'].keys():
-            print(def_selected['parameters'][i])
+            # print(key)
+            # print(def_selected['parameters'])
+            # print(def_selected['parameters'])
             types = def_selected['parameters'][key]
             k = types.get('type')
-            y = self.model.encode(f'"{k}":')[0].tolist()
+            y = self.model.encode(f'"{key}":')[0].tolist()
             self._prompt += y
             self.output += y
 
@@ -164,8 +166,8 @@ class CallMeMaybe:
 
 
         # print(key)
-        # print(self.model.decode(self.output))
-        # print('TAPITRA')
+        print(self.model.decode(self.output))
+        print('TAPITRA')
 
 
             # definition = ft_list[i]

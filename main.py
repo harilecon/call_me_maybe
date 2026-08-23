@@ -138,7 +138,6 @@ def main(msg):
                 ...
 
             if next == 1:
-                b = True
                 break
 
             print(x)
