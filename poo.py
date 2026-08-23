@@ -37,8 +37,9 @@ class CallMeMaybe:
     def set_prompt(self, prompt: str) -> None:
         exemple = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
         prompt = f"""
-        Your task is to select the appropriate function from the available functions
+        select the appropriate function from the available functions
         and extract its arguments from the user's request.
+        always valid json
         Available functions:
         {self.ft_list}
         Example:
@@ -54,20 +55,14 @@ class CallMeMaybe:
             if i not in valid:
                 ids[i] = -math.inf
 
-    # def _append_new_token(self, new_token: list[int]):
-    #         self.output += new_token
-    #         self._prompt += new_token         
-
-
     def search_name(self):
             for _ in range(10):
                 ids = self.model.get_logits_from_input_ids(self._prompt)
-                # print(self._constraint_name)
+
                 self.mask_token(ids, self._constraint_name)
                 next = ids.index(max(ids))
                 self.output.append(next)
                 self._prompt.append(next)
-                # self._append_new_token(list[next])
 
                 try:
                     output = self.model.decode(self.output)
@@ -79,20 +74,23 @@ class CallMeMaybe:
                 if next == self.model.encode('"')[0].tolist()[0]:
                     name = output.split('"')[3]
                     if name not in self.list_name:
-                        return None
+                        raise ValueError('fumction name not found')
 
                     return name
-
 
     def search_parameter(self, constraint: list[int]):
 
         for _ in range(100):
             ids = self.model.get_logits_from_input_ids(self._prompt)
+
             if constraint:
                 self.mask_token(ids, constraint)
     
             next = ids.index(max(ids))
-            if next == 11:
+            print(next, self.model.decode([next]))
+            if next == 11 or next == 497 or next == 11583:
+                if next == 11583:
+                    self.put_value(')')
                 return None
 
             self._prompt.append(next)
@@ -106,86 +104,76 @@ class CallMeMaybe:
                 ...
 
         raise ValueError("reach max tokens")
-            
 
+    def put_value(self, msg: str) -> None:
+        msg_token = self.model.encode(msg)[0].tolist()
+        self._prompt += msg_token
+        self.output += msg_token
 
-    
     def solution(self):
+        self.put_value('{"name": "')
 
-
-        self._prompt += self.model.encode('{"name": "')[0].tolist()
-        self.output += self.model.encode('{"name": "')[0].tolist()
         name = self.search_name()
-
 
         for definition in self.ft_list:
             if definition['name'] == name:
                 def_selected = definition
 
-        parameter = self.model.encode(', "parameters": {')[0].tolist()
-        self._prompt += parameter
-        self.output += parameter
+        self.put_value(', "parameters": {')
 
         with open(self.model.get_path_to_vocab_file(), "r") as f:
             vocab = json.load(f)
 
         constraint = {
                 'string': None,
-                # 'number': [self.llm_vocabulary[i] for i in self.llm_vocabular if re.search("^[0-9\-\+.\,}\"]$" ,i)]
-        'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,}]$" ,i)]
-                
+                'number': [vocab[i] for i in vocab if re.search("^[0-9\-.\,]$|^}}?$" ,i)]
                 }
         variable = def_selected['parameters'].keys()
         variable_len = len(variable)
         i = 0
         for key in def_selected['parameters'].keys():
-            # print(key)
-            # print(def_selected['parameters'])
-            # print(def_selected['parameters'])
+
             types = def_selected['parameters'][key]
             k = types.get('type')
-            y = self.model.encode(f'"{key}":')[0].tolist()
-            self._prompt += y
-            self.output += y
+
+            self.put_value(f'"{key}":')
 
             try:
                 output = self.search_parameter(constraint[k])
                 if output:
-                    print("vita teto")
-                    print(output)
-                    print("vita teto")
-                    sys.exit(0)
+                    self.output = []
+                    return output
+
             except Exception as e:
                 print(e)
                 sys.exit(-1)
             if i < variable_len:
                 i+=1
-                y = self.model.encode(f', ')[0].tolist()
-                self._prompt += y
-                self.output += y
+                if k == 'number':
+                    self.put_value(', ')
+                elif k == 'string':
+                    self.put_value('",')
 
-
-        # print(key)
         print(self.model.decode(self.output))
-        print('TAPITRA')
-
-
-            # definition = ft_list[i]
-
-        # try:
-        #     self.search_parameter(constraint[])
-
-
-
 
 
 def main():
-    call_me = CallMeMaybe()
-    call_me.set_prompt("what is the sum of 3 and 4?")
-    call_me.solution()
+    with open("function_calling_tests.json", "r") as f:
+        call = json.load(f)
 
+    call_me: list[dict] = CallMeMaybe()
+    tab = []
 
+    for f in call:
+        print(f)
+        call_me.set_prompt(f)
+        print(call_me.solution())
+        tab.append(f)
 
+    print(tab)
+
+    with open("harimino.txt", "w") as f:
+        f.write(list(tab))
 
 
 if __name__ == '__main__':
