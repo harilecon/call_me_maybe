@@ -1,8 +1,22 @@
 from llm_sdk import Small_LLM_Model
+from pydantic import BaseModel, Field, ValidationError
+from typing import Annotated
 import sys
 import json
 import math
 import re
+
+
+class MyFuctionDefinition(BaseModel):
+    name: Annotated[str, Field(...)]
+    description: Annotated[str, Field(...)]
+    parameters: Annotated[dict | None, Field(...)]
+    returns: Annotated[dict | None, Field(...)]
+
+class MyFunctionCall(BaseModel):
+    prompt: Annotated[str, Field(..., ge=1)]
+    name: Annotated[str, Field(...)] 
+    parameters: Annotated[dict | None, Field(...)]
 
 
 def search_variable_number(
@@ -103,14 +117,35 @@ def put_value(output_token: list[int],token: list[int], value: str) -> None:
 def call_me_maybe(msg):
 
     try:
+        ft_list = []
+        with open("functions_definition.json", "r") as test_file:
+                data = json.load(test_file)
+                for ft in data:
+                    ft_list.append(MyFuctionDefinition(**ft).model_dump())
+
         with open(model.get_path_to_vocab_file(), "r") as f:
             vocab = json.load(f)
 
-        with open("functions_definition.json", "r") as f:
-            ft_list: list[dict] = json.load(f)
+    except json.decoder.JSONDecodeError as e:
+        print("error on Json convertion")
+        print(e)
+        sys.exit(-1)
 
-    except Exception:
+    except OSError as e:
+        print("error opening the file")
+        print(e)
+        sys.exit(-1)
+
+    except ValidationError as e:
+        print("Validation Error")
+        print(e)
+        sys.exit(-1)
+
+
+
+    except Exception as e:
         print("Error")
+        print(e)
         sys.exit(-1)
 
     ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
