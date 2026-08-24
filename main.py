@@ -202,5 +202,5 @@ if __name__ == '__main__':
     print(d)
 
     with open("harimino.output_token", "w") as f:
-        f.write(d)
+        f.write(str(d))
     # main("What is the sum of 265 and -345?")
