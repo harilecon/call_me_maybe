@@ -1,4 +1,4 @@
-from src.llm_sdk.llm_sdk import Small_LLM_Model
+from llm_sdk import Small_LLM_Model
 import sys
 import json
 import math
@@ -20,8 +20,9 @@ def search_variable_number(token, output_token: list, constraint):
         token.append(next)
         try:
             x = model.decode(output_token)
-            print(x)
+            # print(x)
             json.loads(x)
+            # print("\n\n\n\n\n\n\n\n")
             break
         except Exception:
             ...
@@ -29,29 +30,55 @@ def search_variable_number(token, output_token: list, constraint):
     return (token, output_token)
 
 
+def search_name(
+    token,
+    output_token: list[int],
+    constraint,
+    tab_name_tokenised: list[list[int]],
+):
+    tab = tab_name_tokenised.copy()
 
-def search_name(token, output_token: list, constraint):
-    for _ in range(10):
+    for index in range(10):
         ids = model.get_logits_from_input_ids(token)
 
-
         mask_token(ids, constraint)
-        next = ids.index(max(ids))
-        token.append(next)
-        output_token.append(next)
-        try:
-            x = model.decode(output_token)
-            json.loads(x)
-            break
-        except Exception:
-            ...
 
-        if next == 1:
-            break
+        next_token = ids.index(max(ids))
 
-        print(x)
+        # Le LLM a réellement généré ce token
+        token.append(next_token)
+        output_token.append(next_token)
 
-    return (token, output_token)
+        # On garde uniquement les noms compatibles
+        tmp = []
+
+        for name_tokenised in tab:
+            if (
+                index < len(name_tokenised)
+                and name_tokenised[index] == next_token
+            ):
+                tmp.append(name_tokenised)
+
+        tab = tmp
+
+        # Aucun nom ne correspond
+        if not tab:
+            return None
+
+        # Une seule fonction est identifiée
+        if len(tab) == 1:
+            remaining = tab[0][index + 1:]
+
+            token.extend(remaining)
+            output_token.extend(remaining)
+            put_value(output_token, token, "\" ")
+            return token, output_token
+
+        # Token de fin
+        if next_token == 1:
+            return None
+
+    return None
 
 def select_function(function_name: str, ft_list: list) -> list[str]:
     for i in range(len(ft_list)):
@@ -60,7 +87,7 @@ def select_function(function_name: str, ft_list: list) -> list[str]:
 
 
 
-model = Small_LLM_Model()
+model = Small_LLM_Model("HuggingFaceTB/SmolLM2-1.7B-Instruct")
 vocab = model.get_path_to_vocab_file()
 
 
@@ -83,7 +110,7 @@ def main(msg):
         with open(model.get_path_to_vocab_file(), "r") as f:
             vocab = json.load(f)
 
-        with open("src/functions_definition.json", "r") as f:
+        with open("functions_definition.json", "r") as f:
             ft_list: list[dict] = json.load(f)
 
     except Exception:
@@ -103,6 +130,7 @@ def main(msg):
     Output: 
     """
 
+    table_name_tokenised = [model.encode(ft['name'])[0].tolist() for ft in ft_list]
 
     name = list(set([x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]))
     name.append(model.encode("\"")[0].tolist()[0])
@@ -119,7 +147,9 @@ def main(msg):
 
 
 
-    token, output_token =  search_name(token, output_token, name)
+    token, output_token =  search_name(token, output_token, name, table_name_tokenised)
+    # print(model.decode(output_token))
+    # sys.exit(1)
 
 
 
@@ -132,14 +162,9 @@ def main(msg):
 
     constraint = {
         'string': None,
-        'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,}\"Ġ]$" ,i)]
+        'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,\"Ġ]$" ,i)]
         }
 
-    # output_token = '{"name": "fn_add_numbers", "parameters": {'
-    # token += model.encode('{"name": "fn_add_numbers", "parameters": {')[0].tolist()
-
-
-    # chercher les parameter
 
 
 
@@ -155,7 +180,7 @@ def main(msg):
         put_value(output_token, token, f'"{type_parameter[i]}":')
 
 
-        token, output_token = search_variable_number(token, output_token, constraint[function_selected['parameters'][type_parameter[i]]['type']])
+        token, output_token = search_variable_number(token, output_token, constraint[types])
         try:
             return json.loads(model.decode(output_token))
         except Exception:
@@ -170,27 +195,8 @@ def main(msg):
     return json.loads(model.decode(output_token))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
-    with open("src/function_calling_tests.json", "r") as test_file:
+    with open("function_calling_tests.json", "r") as test_file:
         data = json.load(test_file)
 
     d = []
@@ -203,4 +209,3 @@ if __name__ == '__main__':
 
     with open("harimino.output_token", "w") as f:
         f.write(str(d))
-    # main("What is the sum of 265 and -345?")
