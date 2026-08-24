@@ -3,197 +3,172 @@ import sys
 import json
 import math
 import re
-# /home/tsitoand/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca/vocab.json
+
+
+def search_variable_number(token, output_token: list, constraint):
+
+    for _ in range(100):
+        ids = model.get_logits_from_input_ids(token)
+
+        next = ids.index(max(ids))
+        if next == 11:
+            break
+        if constraint:
+            mask_token(ids, constraint)
+
+        output_token.append(next)
+        token.append(next)
+        try:
+            x = model.decode(output_token)
+            print(x)
+            json.loads(x)
+            break
+        except Exception:
+            ...
+        
+    return (token, output_token)
+
+
+
+def search_name(token, output_token: list, constraint):
+    for _ in range(10):
+        ids = model.get_logits_from_input_ids(token)
+
+
+        mask_token(ids, constraint)
+        next = ids.index(max(ids))
+        token.append(next)
+        output_token.append(next)
+        try:
+            x = model.decode(output_token)
+            json.loads(x)
+            break
+        except Exception:
+            ...
+
+        if next == 1:
+            break
+
+        print(x)
+
+    return (token, output_token)
+
+def select_function(function_name: str, ft_list: list) -> list[str]:
+    for i in range(len(ft_list)):
+        if ft_list[i]['name'] == function_name:
+            return ft_list[i]
+
 
 
 model = Small_LLM_Model()
 vocab = model.get_path_to_vocab_file()
 
+
+
+def mask_token(ids: list[float], valid: list):
+    for i in range(len(ids)):
+        if i not in valid:
+            ids[i] = -math.inf
+
+
+def put_value(output_token: list[int],token: list[int], value: str) -> None:
+    message_tokenised = model.encode(value)[0].tolist()
+    output_token += message_tokenised
+    token += message_tokenised
+
+
 def main(msg):
 
-    with open("src/functions_definition.json", "r") as f:
-        ft_list: list[dict] = json.load(f)
+    try:
+        with open(model.get_path_to_vocab_file(), "r") as f:
+            vocab = json.load(f)
 
+        with open("src/functions_definition.json", "r") as f:
+            ft_list: list[dict] = json.load(f)
 
-    name = []
+    except Exception:
+        print("Error")
+        sys.exit(-1)
 
-
-    print(msg)
 
     ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
-
     prompt = f"""
     Your task is to select the appropriate function from the available functions
     and extract its arguments from the user's request.
-
-    Available functions:
-    {ft_list}
-
+    Available functions: {ft_list}
     Example:
     User request: 'what's the sum of 2,0 and 3,5'
     Output: {ex}
-
     User request: {msg}
-
-    Output:
+    Output: 
     """
 
 
-    # ft_name = [ft['name'] for ft in ft_list]
-
-    name = [x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]
-    name = list(set(name))
-    name.append(1)
-    name += [1]
+    name = list(set([x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]))
+    name.append(model.encode("\"")[0].tolist()[0])
 
 
-
-    def mask_token(ids: list[float], valid: list):
-        for i in range(len(ids)):
-            if i not in valid:
-                ids[i] = -math.inf
+    output_token = []
+    token = model.encode(prompt)[0].tolist()
 
 
-    # template = '{"name": "'
-    template = model.encode('{"name": "')[0].tolist()
+    put_value(output_token, token, '{"name": "')
+    token, output_token =  search_name(token, output_token, name)
+    function_name = model.decode(output_token).split("\"")[3]
 
+    put_value(output_token, token, ', "parameters": {')
 
-    txt = []
-    # # # recherche name
-
-    tokens = model.encode(prompt)[0].tolist()
-    txt += model.encode('{"name": "')[0].tolist()
-    tokens += txt
-
-
-
-    with open(model.get_path_to_vocab_file(), "r") as f:
-        vocab = json.load(f)
-
-
-
-    def search_variable_number(tokens, txt: list, constraint):
-
-        for _ in range(100):
-            ids = model.get_logits_from_input_ids(tokens)
-
-            next = ids.index(max(ids))
-            if next == 11:
-                break
-            if constraint:
-                mask_token(ids, constraint)
-
-            txt.append(next)
-            tokens.append(next)
-            try:
-                x = model.decode(txt)
-                print(x)
-                json.loads(x)
-                break
-            except Exception:
-                ...
-            
-        return (tokens, txt)
-
-
-
-    # def search_variable_name(tokens, txt: list, constraint):
-
-    #     for _ in range(10):
-    #         ids = model.get_logits_from_input_ids(tokens)
-
-    #         next = ids.index(max(ids))
-    #         if next == 1:
-    #             break
-    #         if constraint:
-    #             mask_token(ids, constraint)
-
-    #         txt.append(next)
-    #         tokens.append(next)
-    #         try:
-    #             x = model.decode(txt)
-    #             print(x)
-    #             return(json.loads(x))
-    #             break
-    #         except Exception:
-    #             print("merde on remet ca")
-    #             ...
-
-    #     return (tokens, txt)
-
-    def search_name(tokens, txt: list, constraint):
-        for _ in range(10):
-            ids = model.get_logits_from_input_ids(tokens)
-
-
-            mask_token(ids, constraint)
-            next = ids.index(max(ids))
-            tokens.append(next)
-            txt.append(next)
-            try:
-                x = model.decode(txt)
-                json.loads(x)
-                break
-            except Exception:
-                ...
-
-            if next == 1:
-                break
-
-            print(x)
-
-        return (tokens, txt)
-
-    tokens, txt =  search_name(tokens, txt, name)
-
-    # for j in ft_list:
-    #     if j['name'] == name:
-    #         x = j
-    parameter = model.encode(', "parameters": {')[0].tolist()
-    tokens += parameter
-    txt += parameter
-
-    # par = x['parameters']
 
 
     constraint = {
         'string': None,
-        'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,}\"]$" ,i)]
+        'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,}\"Ġ]$" ,i)]
         }
 
-    # txt = '{"name": "fn_add_numbers", "parameters": {'
-    # tokens += model.encode('{"name": "fn_add_numbers", "parameters": {')[0].tolist()
 
-
-    # chercher les parameter
-    for i in range(len(ft_list)):
-        if ft_list[i]['name'] == 'fn_add_numbers':
-            parameter = ft_list[i]['parameters']
-            # definition = ft_list[i]
-            break
-
-    # print(parameter)
+    function_selected = select_function(function_name, ft_list)
+    parameter = function_selected['parameters']
     type_parameter = [i for i in parameter]
 
-    print(f"merde on en est la {len(type_parameter)}")
+
     for i in range(len(type_parameter)):
-        print(type_parameter[i])
-        tokens += model.encode(f'"{type_parameter[i]}":')[0].tolist()
-        txt += model.encode(f'"{type_parameter[i]}": ')[0].tolist()
-        # tokens, txt = search_variable_number(tokens, txt, constraint['number'])
-        tokens, txt = search_variable_number(tokens, txt, None)
+        types = function_selected['parameters'][type_parameter[i]]['type'] 
+
+        put_value(output_token, token, f'"{type_parameter[i]}":')
+
+        token, output_token = search_variable_number(token, output_token, types)
         try:
-            return json.loads(model.decode(txt))
+            return json.loads(model.decode(output_token))
         except Exception:
             ...
 
         if i < len(type_parameter):
             y = model.encode(f', ')[0].tolist()
-            tokens += y
-            txt += y
+            token += y
+            output_token += y
 
 
-    return json.loads(model.decode(txt))
+    return json.loads(model.decode(output_token))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     with open("src/function_calling_tests.json", "r") as test_file:
@@ -207,6 +182,6 @@ if __name__ == '__main__':
 
     print(d)
 
-    with open("harimino.txt", "w") as f:
+    with open("harimino.output_token", "w") as f:
         f.write(d)
     # main("What is the sum of 265 and -345?")
