@@ -112,8 +112,18 @@ def main(msg):
     token = model.encode(prompt)[0].tolist()
 
 
+
+
+
     put_value(output_token, token, '{"name": "')
+
+
+
     token, output_token =  search_name(token, output_token, name)
+
+
+
+
     function_name = model.decode(output_token).split("\"")[3]
 
     put_value(output_token, token, ', "parameters": {')
@@ -124,6 +134,14 @@ def main(msg):
         'string': None,
         'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,}\"Ġ]$" ,i)]
         }
+
+    # output_token = '{"name": "fn_add_numbers", "parameters": {'
+    # token += model.encode('{"name": "fn_add_numbers", "parameters": {')[0].tolist()
+
+
+    # chercher les parameter
+
+
 
 
     function_selected = select_function(function_name, ft_list)
@@ -136,7 +154,8 @@ def main(msg):
 
         put_value(output_token, token, f'"{type_parameter[i]}":')
 
-        token, output_token = search_variable_number(token, output_token, types)
+
+        token, output_token = search_variable_number(token, output_token, constraint[function_selected['parameters'][type_parameter[i]]['type']])
         try:
             return json.loads(model.decode(output_token))
         except Exception:
