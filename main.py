@@ -5,28 +5,32 @@ import math
 import re
 
 
-def search_variable_number(token, output_token: list, constraint):
+def search_variable_number(
+        token: list[int],
+        output_token: list[int],
+        constraint: list[int]
+        ) -> tuple[list[int], list[int]]:
 
     for _ in range(100):
         ids = model.get_logits_from_input_ids(token)
 
         next = ids.index(max(ids))
-        if next == 11:
+        if next == model.encode(",")[0].tolist()[0]:
             break
+
         if constraint:
             mask_token(ids, constraint)
 
         output_token.append(next)
         token.append(next)
+
         try:
             x = model.decode(output_token)
-            # print(x)
             json.loads(x)
-            # print("\n\n\n\n\n\n\n\n")
             break
         except Exception:
             ...
-        
+
     return (token, output_token)
 
 
@@ -35,23 +39,19 @@ def search_name(
     output_token: list[int],
     constraint,
     tab_name_tokenised: list[list[int]],
-):
+) -> tuple[list[int], list[int]]:
     tab = tab_name_tokenised.copy()
 
-    for index in range(10):
+    for index in range(20):
         ids = model.get_logits_from_input_ids(token)
 
         mask_token(ids, constraint)
-
         next_token = ids.index(max(ids))
 
-        # Le LLM a réellement généré ce token
         token.append(next_token)
         output_token.append(next_token)
 
-        # On garde uniquement les noms compatibles
         tmp = []
-
         for name_tokenised in tab:
             if (
                 index < len(name_tokenised)
@@ -61,24 +61,18 @@ def search_name(
 
         tab = tmp
 
-        # Aucun nom ne correspond
         if not tab:
-            return None
+            raise ValueError("No name found for the prompt")
 
-        # Une seule fonction est identifiée
         if len(tab) == 1:
             remaining = tab[0][index + 1:]
 
             token.extend(remaining)
             output_token.extend(remaining)
             put_value(output_token, token, "\" ")
+
             return token, output_token
 
-        # Token de fin
-        if next_token == 1:
-            return None
-
-    return None
 
 def select_function(function_name: str, ft_list: list) -> list[str]:
     for i in range(len(ft_list)):
@@ -86,10 +80,12 @@ def select_function(function_name: str, ft_list: list) -> list[str]:
             return ft_list[i]
 
 
-
-model = Small_LLM_Model("HuggingFaceTB/SmolLM2-1.7B-Instruct")
-vocab = model.get_path_to_vocab_file()
-
+try:
+    model = Small_LLM_Model()
+    vocab = model.get_path_to_vocab_file()
+except Exception as e:
+    print(e)
+    sys.exit(-1)
 
 
 def mask_token(ids: list[float], valid: list):
@@ -104,7 +100,7 @@ def put_value(output_token: list[int],token: list[int], value: str) -> None:
     token += message_tokenised
 
 
-def main(msg):
+def call_me_maybe(msg):
 
     try:
         with open(model.get_path_to_vocab_file(), "r") as f:
@@ -116,7 +112,6 @@ def main(msg):
     except Exception:
         print("Error")
         sys.exit(-1)
-
 
     ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
     prompt = f"""
@@ -131,56 +126,37 @@ def main(msg):
     """
 
     table_name_tokenised = [model.encode(ft['name'])[0].tolist() for ft in ft_list]
-
-    name = list(set([x for ft in ft_list for x in model.encode(ft['name'])[0].tolist()]))
+    name = [tok for name_tok in table_name_tokenised for tok in name_tok]
     name.append(model.encode("\"")[0].tolist()[0])
 
 
     output_token = []
     token = model.encode(prompt)[0].tolist()
 
-
-
-
-
     put_value(output_token, token, '{"name": "')
 
-
-
     token, output_token =  search_name(token, output_token, name, table_name_tokenised)
-    # print(model.decode(output_token))
-    # sys.exit(1)
-
-
-
-
     function_name = model.decode(output_token).split("\"")[3]
-
-    put_value(output_token, token, ', "parameters": {')
-
-
 
     constraint = {
         'string': None,
         'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,\"Ġ]$" ,i)]
         }
 
-
-
-
-
     function_selected = select_function(function_name, ft_list)
     parameter = function_selected['parameters']
-    type_parameter = [i for i in parameter]
 
+    if not parameter:
+        put_value(output_token, token, ', "parameters": null}')
+        return json.dump(model.decode(output_token))
+    type_parameter = [i for i in parameter]
+    put_value(output_token, token, ', "parameters": {')
 
     for i in range(len(type_parameter)):
         types = function_selected['parameters'][type_parameter[i]]['type'] 
-
         put_value(output_token, token, f'"{type_parameter[i]}":')
-
-
         token, output_token = search_variable_number(token, output_token, constraint[types])
+
         try:
             return json.loads(model.decode(output_token))
         except Exception:
@@ -191,7 +167,6 @@ def main(msg):
             token += y
             output_token += y
 
-
     return json.loads(model.decode(output_token))
 
 
@@ -201,11 +176,8 @@ if __name__ == '__main__':
 
     d = []
     for i in data:
-        i.update(main(i['prompt']))
+        i.update(call_me_maybe(i['prompt']))
         print(i)
         d.append(i)
 
     print(d)
-
-    with open("harimino.output_token", "w") as f:
-        f.write(str(d))
