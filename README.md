@@ -7,7 +7,7 @@ But here's my number, so
 
 <p align="center">
   <img
-    src="https://media1.tenor.com/m/X8pJ96wlIn8AAAAC/telp-telpon.gif"
+    src="https://s13.gifyu.com/images/bnUlg.gif"
     alt="Fun GIF"
   >
 </p>
