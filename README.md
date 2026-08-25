@@ -2,25 +2,29 @@
 
 > ... Hey, I just met you, and this is crazy
 But here's my number, so
-# call me maybe
 
-### Description
-A function call is the code or instruction that tells a computer program or an AI model to run a specific routine, tool, or API. In AI, it lets a language model output structured data to trigger external actions rather than just generating text .
+# <p style="color: #FFFF;">call me maybe</p>
 
-To perform this project whe have to master constraint decoding to force the LLM to produce JSON valid file. For this project whe use Qwen/Qwen3-0.6B
+## Project Description
 
-### Instructions
+A function call is a mechanism that allows a computer program or an AI model to execute a specific function, tool, or API. In the context of AI, function calling enables a language model to generate structured data that can trigger external actions rather than simply producing plain text.
 
-## Install LLM SDK
+The goal of this project is to master **constrained decoding** in order to guide a Large Language Model (LLM) and force it to generate valid JSON output for function calls.
+
+For this project, we use **Qwen/Qwen3-0.6B**, a lightweight language model, as the base model.
+
+## Instructions
+
+### Install LLM SDK
 
 ```shell
 uv sync
 ```
-## Install depandecy
+### Install depandecy
 ```shell
 uv 
 ```
-## using Makefile
+### using Makefile
 * install
 ```shell
 make install
@@ -35,23 +39,59 @@ make run
 
 AI was use to generate prompt
 
-genrate test test
+genrate test
 
-### Algorithm explanation
-In Large Language Models (LLMs), Finite State Machines (FSMs) are used to enforce structural rules on text generation. This process is called <b>Structured Generation</b> or <b>Guided Decoding</b>.
-<h1>How It Works</h3> 
+structure README documentation
 
-* States: Represent the current position in a specific syntax or pattern (e.g., inside a JSON object, reading a key, reading a string)
+hugging face
 
-* <b> Inputs:</b> The next potential tokens predicted by the LLM.Transitions: Valid legal characters allowed next by the schema rules.
+### Algorithm Explanation
 
-* <b>Logit Bias / Masking:</b> The FSM blocks invalid transition tokens by setting their mathematical probability to zero (-inf). The LLM is forced to pick only from valid tokens.
+In Large Language Models (LLMs), Finite State Machines (FSMs) can be used to enforce structural rules during text generation. This process is commonly called Structured Generation, Guided Decoding, or Constrained Decoding.
+
+<h2>How It Works</h2>
+
+- States: Represent the current position in a specific syntax or pattern. For example, the FSM can track whether the model is currently inside a JSON object, generating a key, or generating a string.
+
+- Inputs: The potential next tokens predicted by the LLM.
+Transitions: Define which tokens are legally allowed next according to the current state and the schema rules.
+
+- Logit Masking: Before selecting the next token, invalid tokens are masked by setting their logits to negative infinity (-∞). After the softmax operation, their probabilities become zero. The LLM is therefore forced to select only from valid tokens.
+
+
+### Performance analysis
+To validate the implementation, I used a two-step validation process.
+
+* First, the LLM output is validated using Python's json module to ensure that the generated output is a valid JSON structure.
+
+* Second, the parsed JSON is passed to a Pydantic model. This validates that the JSON not only has valid syntax but also follows the expected schema, including the function name and its parameters.
+
+The function definitions follow the same validation approach. They are validated against a predefined Pydantic structure to ensure that every function definition follows a consistent format.
+
+This creates a unified validation pipeline and ensures that the function definitions, generated JSON, and final function calls all follow compatible and consistent structures.
+
+
+```mermaid
+graph TD
+    A[Function Definition] --> B[Pydantic Validation]
+    B --> C[Consistent Function Schema]
+    C --> D[LLM Generation]
+    D --> E[JSON Validation]
+    E --> F[Pydantic Validation]
+    F --> G[Validated Function Call]
+```
 
 ### Design decisions
-For this project i preferd to fixe the Json value structur to enforce the LLM to avoid wasting ressource on generating tokens. So the LLM have just to genereta the function name an choice the parameter from the prompt
-### Performance analysis
+For this project, I decided to fix the `JSON` structure in advance in order to reduce the number of tokens the LLM needs to generate. This avoids wasting computational resources on generating predictable structural tokens.
+
+The LLM only needs to generate the function name and choose the appropriate parameter values from the prompt, while the `JSON` structure itself is predefined and handled by the program.
 
 ### Challenges faced
+One of the main challenges was the time constraint. I needed to complete the test and meet the required execution time without using a KV cache. This required optimizing the constrained decoding process to reduce unnecessary computations.
+
+Another challenge was that the LLM did not reliably generate an end-of-sequence (EOS) token. As a result, the generation process could continue even after a valid function call had been produced. To solve this issue, I manually stopped token generation once the expected output structure had been completed.
+
+This was particularly necessary because the JSON structure was predefined: once the function name and all required parameter values had been generated, no additional tokens were needed.
 
 ### Testing strategy
 
