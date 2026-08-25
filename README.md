@@ -1,9 +1,14 @@
 *This project has been created as part of the 42 curriculum by <b>tsitoand</b>*
 
-> ... Hey, I just met you, and this is crazy
-But here's my number, so
 
 # <p style="color: #FFFF;">call me maybe</p>
+
+<p align="center">
+  <img
+    src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjdpZnVqamMzeGVxb24yYTcyNmYyd24ycjVubjFocnplenZ4dW90NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kGdRnb1kF4OmQ/giphy.gif"
+    alt="Fun GIF"
+  >
+</p>
 
 ## Project Description
 
@@ -59,7 +64,23 @@ Transitions: Define which tokens are legally allowed next according to the curre
 - Logit Masking: Before selecting the next token, invalid tokens are masked by setting their logits to negative infinity (-∞). After the softmax operation, their probabilities become zero. The LLM is therefore forced to select only from valid tokens.
 
 
+
+
+### Design decisions
+For this project, I decided to fix the `JSON` structure in advance in order to reduce the number of tokens the LLM needs to generate. This avoids wasting computational resources on generating predictable structural tokens.
+
+The LLM only needs to generate the function name and choose the appropriate parameter values from the prompt, while the `JSON` structure itself is predefined and handled by the program.
+
 ### Performance analysis
+
+### Challenges faced
+One of the main challenges was the time constraint. I needed to complete the test and meet the required execution time without using a KV cache. This required optimizing the constrained decoding process to reduce unnecessary computations.
+
+Another challenge was that the LLM did not reliably generate an end-of-sequence (EOS) token. As a result, the generation process could continue even after a valid function call had been produced. To solve this issue, I manually stopped token generation once the expected output structure had been completed.
+
+This was particularly necessary because the JSON structure was predefined: once the function name and all required parameter values had been generated, no additional tokens were needed.
+
+### Testing strategy
 To validate the implementation, I used a two-step validation process.
 
 * First, the LLM output is validated using Python's json module to ensure that the generated output is a valid JSON structure.
@@ -80,21 +101,6 @@ graph TD
     E --> F[Pydantic Validation]
     F --> G[Validated Function Call]
 ```
-
-### Design decisions
-For this project, I decided to fix the `JSON` structure in advance in order to reduce the number of tokens the LLM needs to generate. This avoids wasting computational resources on generating predictable structural tokens.
-
-The LLM only needs to generate the function name and choose the appropriate parameter values from the prompt, while the `JSON` structure itself is predefined and handled by the program.
-
-### Challenges faced
-One of the main challenges was the time constraint. I needed to complete the test and meet the required execution time without using a KV cache. This required optimizing the constrained decoding process to reduce unnecessary computations.
-
-Another challenge was that the LLM did not reliably generate an end-of-sequence (EOS) token. As a result, the generation process could continue even after a valid function call had been produced. To solve this issue, I manually stopped token generation once the expected output structure had been completed.
-
-This was particularly necessary because the JSON structure was predefined: once the function name and all required parameter values had been generated, no additional tokens were needed.
-
-### Testing strategy
-
 ### Example usage
 
 #### Tested on :
