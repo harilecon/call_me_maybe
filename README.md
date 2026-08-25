@@ -7,7 +7,7 @@ But here's my number, so
 
 <p align="center">
   <img
-    src="https://s13.gifyu.com/images/bnUlg.gif"
+    src="https://cdn.jumpshare.com/preview/dQs589ZtUybhCR06NM_2IDxGTFRlaoLKGTr1aelZo3OT_97aIuIwxOVWoQcH3CAbXjhqDW25nxR0_qawysVkxhSRG6L4iAvwbhSAOhpxhimwHIlp403n3EKLXpAZMaIC"
     alt="Fun GIF"
   >
 </p>
