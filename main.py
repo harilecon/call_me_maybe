@@ -113,13 +113,17 @@ def put_value(output_token: list[int],token: list[int], value: str) -> None:
     output_token += message_tokenised
     token += message_tokenised
 
+from test import time_decorator
 
+
+
+# @time_decorator
 def call_me_maybe(msg):
 
     try:
         ft_list = []
         with open("functions_definition.json", "r") as test_file:
-                data = json.load(test_file)
+                data = json.loads(test_file)
                 for ft in data:
                     ft_list.append(MyFuctionDefinition(**ft).model_dump())
 
@@ -150,7 +154,7 @@ def call_me_maybe(msg):
 
     ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
     prompt = f"""
-    Your task is to select the appropriate function from the available functions
+    Select the appropriate function from the available functions
     and extract its arguments from the user's request.
     Available functions: {ft_list}
     Example:
@@ -206,13 +210,14 @@ def call_me_maybe(msg):
 
 
 if __name__ == '__main__':
-    with open("function_calling_tests.json", "r") as test_file:
-        data = json.load(test_file)
+    print(call_me_maybe("sum of 1 , 2 3 and 4"))
+    # with open("function_calling_tests.json", "r") as test_file:
+    #     data = json.load(test_file)
 
-    d = []
-    for i in data:
-        i.update(call_me_maybe(i['prompt']))
-        print(i)
-        d.append(i)
+    # d = []
+    # for i in data:
+    #     i.update(call_me_maybe(i['prompt']))
+    #     print(i)
+    #     d.append(i)
 
-    print(d)
+    # print(d)
