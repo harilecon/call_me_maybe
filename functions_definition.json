@@ -67,5 +67,11 @@
     "returns": {
       "type": "string"
     }
+  },
+  {
+    "name": "fn_restart_server",
+    "description": "reboot the server whenerver it's needed",
+    "parameters": null,
+    "returns": null
   }
 ]

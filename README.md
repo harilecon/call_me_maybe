@@ -78,27 +78,3 @@ For this project i preferd to fixe the Json value structur to enforce the LLM to
 * apple/OpenELM-1_1B-Instruct
 * stabilityai/stablelm-2-1_6b-chat
 * mistralai/Ministral-8B-Instruct-2410
-
-
-
-MODELS = [
-    # Petit
-    "google/gemma-3-270m",
-    "apple/OpenELM-270M-Instruct",
-    "HuggingFaceTB/SmolLM2-360M-Instruct",
-
-    # ~1B
-    "Qwen/Qwen3-0.6B",
-    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    "apple/OpenELM-1_1B-Instruct",
-    "tiiuae/Falcon3-1B-Instruct",
-
-    # ~2B
-    "Qwen/Qwen3-1.7B",
-    "HuggingFaceTB/SmolLM2-1.7B-Instruct",
-    "ibm-granite/granite-3.3-2b-instruct",
-
-    # ~3B+
-    "HuggingFaceTB/SmolLM3-3B",
-    "microsoft/Phi-3.5-mini-instruct",
-]

@@ -7,12 +7,14 @@ import re
 
 
 class CallMeMaybe:
+    model = Small_LLM_Model()
+
+
     def __init__(self):
         try:
-            self.model = Small_LLM_Model()
-            self.vocab: str = self.model.get_path_to_vocab_file()
+            self.vocab: str = CallMeMaybe.model.get_path_to_vocab_file()
 
-            with open(self.model.get_path_to_vocab_file(), "r") as f:
+            with open(CallMeMaybe.model.get_path_to_vocab_file(), "r") as f:
                 self.llm_vocabulary = json.load(f)
 
             with open("functions_definition.json", "r") as f:
@@ -29,9 +31,9 @@ class CallMeMaybe:
         self.separator = [self.llm_vocabulary[i] for i in self.llm_vocabulary if (i == "," or i == '",' or i == ')",')]
 
     def _set_constraint_name(self) -> None:
-        all_token_name = [x for ft in self.ft_list for x in self.model.encode(ft['name'])[0].tolist()]
+        all_token_name = [x for ft in self.ft_list for x in CallMeMaybe.model.encode(ft['name'])[0].tolist()]
         self._constraint_name = list(set(all_token_name))
-        self._constraint_name.append(self.model.encode('"')[0].tolist()[0])
+        self._constraint_name.append(CallMeMaybe.model.encode('"')[0].tolist()[0])
         return self._constraint_name
 
 
@@ -49,7 +51,7 @@ class CallMeMaybe:
         User request: {prompt}
         Output: 
         """
-        self._prompt = self.model.encode(prompt)[0].tolist()
+        self._prompt = CallMeMaybe.model.encode(prompt)[0].tolist()
 
     def mask_token(self, ids: list[float], valid: list):
         for i in range(len(ids)):
@@ -58,7 +60,7 @@ class CallMeMaybe:
 
     def search_name(self):
             for _ in range(10):
-                ids = self.model.get_logits_from_input_ids(self._prompt)
+                ids = CallMeMaybe.model.get_logits_from_input_ids(self._prompt)
 
                 self.mask_token(ids, self._constraint_name)
                 next = ids.index(max(ids))
@@ -66,13 +68,13 @@ class CallMeMaybe:
                 self._prompt.append(next)
 
                 try:
-                    output = self.model.decode(self.output)
+                    output = CallMeMaybe.model.decode(self.output)
                     json.loads(output)
                     break
                 except Exception:
                     ...
 
-                if next == self.model.encode('"')[0].tolist()[0]:
+                if next == CallMeMaybe.model.encode('"')[0].tolist()[0]:
                     name = output.split('"')[3]
                     if name not in self.list_name:
                         raise ValueError('fumction name not found')
@@ -82,21 +84,21 @@ class CallMeMaybe:
     def search_parameter(self, constraint: list[int]):
 
         for _ in range(100):
-            ids = self.model.get_logits_from_input_ids(self._prompt)
+            ids = CallMeMaybe.model.get_logits_from_input_ids(self._prompt)
 
             if constraint:
                 self.mask_token(ids, constraint)
     
             next = ids.index(max(ids))
             if next in self.separator:
-                if next == self.model.encode("')\",'")[0].tolist()[0]:
+                if next == CallMeMaybe.model.encode("')\",'")[0].tolist()[0]:
                     self.put_value(')')
                 return None
 
             self._prompt.append(next)
             self.output.append(next)
             try:
-                output = self.model.decode(self.output)
+                output = CallMeMaybe.model.decode(self.output)
                 return(json.loads(output))
             except Exception:
                 ...
@@ -104,7 +106,7 @@ class CallMeMaybe:
         raise ValueError("reach max tokens")
 
     def put_value(self, msg: str) -> None:
-        msg_token = self.model.encode(msg)[0].tolist()
+        msg_token = CallMeMaybe.model.encode(msg)[0].tolist()
         self._prompt += msg_token
         self.output += msg_token
 
@@ -114,13 +116,12 @@ class CallMeMaybe:
         name = self.search_name()
 
         for definition in self.ft_list:
-            print(f"\n\n\n{name}\n\n\n")
             if definition['name'] == name:
                 def_selected = definition
 
         self.put_value(', "parameters": {')
 
-        with open(self.model.get_path_to_vocab_file(), "r") as f:
+        with open(CallMeMaybe.model.get_path_to_vocab_file(), "r") as f:
             vocab = json.load(f)
 
         constraint = {
@@ -152,8 +153,6 @@ class CallMeMaybe:
                     self.put_value(', ')
                 elif k == 'string':
                     self.put_value('",')
-
-        # print(self.model.decode(self.output))
 
 
 def main():
