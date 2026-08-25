@@ -192,6 +192,7 @@ def call_me_maybe(msg):
     type_parameter = [i for i in parameter]
     put_value(output_token, token, ', "parameters": {')
 
+    # print(len(type_parameter))
     for i in range(len(type_parameter)):
         types = function_selected['parameters'][type_parameter[i]]['type'] 
         put_value(output_token, token, f'"{type_parameter[i]}":')
@@ -202,24 +203,34 @@ def call_me_maybe(msg):
         except Exception:
             ...
 
-        if i < len(type_parameter):
+        if i < len(type_parameter) - 1:
+            # print(i)
             y = model.encode(f', ')[0].tolist()
             token += y
             output_token += y
+        else:
+            y = model.encode('}}')[0].tolist()
+            token += y
+            output_token += y
 
+        # print(model.decode(output_token))
+        # else:
+        #     y = model.encode('}}')[0].tolist()
+        #     token += y
+        #     output_token += y
     return model.decode(output_token)
     # return json.loads(model.decode(output_token))
 
 
 if __name__ == '__main__':
-    print(call_me_maybe("sum of apple and banana"))
-    # with open("function_calling_tests.json", "r") as test_file:
-    #     data = json.load(test_file)
+    # print(call_me_maybe("great Shrek"))
+    with open("function_calling_tests.json", "r") as test_file:
+        data = json.load(test_file)
 
-    # d = []
-    # for i in data:
-    #     i.update(call_me_maybe(i['prompt']))
-    #     print(i)
-    #     d.append(i)
+    d = []
+    for i in data:
+        print(call_me_maybe(i['prompt']))
+        # print(i)
+        # d.append(i)
 
     # print(d)

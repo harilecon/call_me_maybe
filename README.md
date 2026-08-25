@@ -1,11 +1,13 @@
 *This project has been created as part of the 42 curriculum by <b>tsitoand</b>*
 
+> ... Hey, I just met you, and this is crazy
+But here's my number, so
 
 # <p style="color: #FFFF;">call me maybe</p>
 
 <p align="center">
   <img
-    src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjdpZnVqamMzeGVxb24yYTcyNmYyd24ycjVubjFocnplenZ4dW90NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kGdRnb1kF4OmQ/giphy.gif"
+    src="https://media1.tenor.com/m/X8pJ96wlIn8AAAAC/telp-telpon.gif"
     alt="Fun GIF"
   >
 </p>
