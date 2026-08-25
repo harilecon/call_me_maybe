@@ -28,12 +28,13 @@ def search_variable_number(
     for _ in range(100):
         ids = model.get_logits_from_input_ids(token)
 
+        if constraint:
+            mask_token(ids, constraint)
+
         next = ids.index(max(ids))
         if next == model.encode(",")[0].tolist()[0]:
             break
 
-        if constraint:
-            mask_token(ids, constraint)
 
         output_token.append(next)
         token.append(next)
@@ -211,7 +212,7 @@ def call_me_maybe(msg):
 
 
 if __name__ == '__main__':
-    print(call_me_maybe("sum of 1 , 2 3 and 4"))
+    print(call_me_maybe("sum of apple and banana"))
     # with open("function_calling_tests.json", "r") as test_file:
     #     data = json.load(test_file)
 
