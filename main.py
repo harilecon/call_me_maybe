@@ -123,7 +123,7 @@ def call_me_maybe(msg):
     try:
         ft_list = []
         with open("functions_definition.json", "r") as test_file:
-                data = json.loads(test_file)
+                data = json.load(test_file)
                 for ft in data:
                     ft_list.append(MyFuctionDefinition(**ft).model_dump())
 
@@ -147,10 +147,10 @@ def call_me_maybe(msg):
 
 
 
-    except Exception as e:
-        print("Error")
-        print(e)
-        sys.exit(-1)
+    # except Exception as e:
+    #     print("Error")
+    #     print(e)
+    #     sys.exit(-1)
 
     ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
     prompt = f"""
@@ -206,7 +206,8 @@ def call_me_maybe(msg):
             token += y
             output_token += y
 
-    return json.loads(model.decode(output_token))
+    return model.decode(output_token)
+    # return json.loads(model.decode(output_token))
 
 
 if __name__ == '__main__':
