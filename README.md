@@ -8,7 +8,7 @@ But here's my number, so
 <p align="center">
   <img
     src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmFyN3IzdzloOGh0ZjRna2R5cHB5YnN0Y2g0a25tZHpjeWNhZHlkNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/eJuyczQANvtGgaeakw/giphy.gif"
-    alt="Fun GIF"
+    alt="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmFyN3IzdzloOGh0ZjRna2R5cHB5YnN0Y2g0a25tZHpjeWNhZHlkNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/eJuyczQANvtGgaeakw/giphy.gif"
   >
 </p>
 
@@ -21,36 +21,52 @@ The goal of this project is to master **constrained decoding** in order to guide
 For this project, we use **Qwen/Qwen3-0.6B**, a lightweight language model, as the base model.
 
 ## Instructions
-
-### Install LLM SDK
-
 ```shell
-uv sync
+# clone the repos
+git clone https://github.com/harilecon/call_me_maybe.git
 ```
-### Install depandecy
+
+
 ```shell
-uv 
-```
-### using Makefile
-* install
-```shell
+# install dependency
 make install
 ```
-* run
+
 ```shell
+# run the programm
 make run
 ```
+
+```shell
+# check flake8 and mypy
+make lint
+```
+```shell
+# check flake8 and mypy --strict
+make lint-strict
+```
+
 
 ### Resources
 
 
-AI was use to generate prompt
 
-genrate test
 
-structure README documentation
+Resources
+* YouTube videos — Additional video resources related to the project.
+* [Hugging Face](https://huggingface.co/) — Resources and models used for the project.
+[Astral UV Documentation](https://docs.astral.sh/uv/) — Learn how to install, use, and understand uv.
 
-hugging face
+
+#### AI Usage
+
+AI was used to assist with:
+
+* Generating prompts.
+* Generating the test structure.
+* Writing parts of the README documentation.
+* Assisting with function and variable name selection.
+* Preparing and organizing the resources section of the README.
 
 ### Algorithm Explanation
 
@@ -104,6 +120,7 @@ graph TD
     F --> G[Validated Function Call]
 ```
 ### Example usage
+
 
 #### Tested on :
 * Qwen/Qwen3-0.6B
