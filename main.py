@@ -19,7 +19,7 @@ class MyFunctionCall(BaseModel):
     parameters: Annotated[dict | None, Field(...)]
 
 
-def search_variable_number(
+def search_parameter(
         token: list[int],
         output_token: list[int],
         ) -> tuple[list[int], list[int]]:
@@ -31,7 +31,6 @@ def search_variable_number(
         next = ids.index(max(ids))
 
 
-        # print(f"\n\n\n\n\n\n\n\n\n{next}{model.decode([next])}\n\n\n\n\n\n\n\n\n\n\n")
 
 
         if next == model.encode(",")[0].tolist()[0]:
@@ -196,18 +195,19 @@ def call_me_maybe(msg):
         put_value(output_token, token, ', "parameters": null}')
         return json.dump(model.decode(output_token))
 
-    type_parameter = [i for i in parameter]
+    key_parameter = [i for i in parameter]
 
-    # print(f"\n\n\n\n\n{type_parameter}\n\n\n\n\n\n")
+    # print(f"\n\n\n\n\n{key_parameter}\n\n\n\n\n\n")
 
     put_value(output_token, token, ', "parameters": {')
 
-    # print(len(type_parameter))
-    for i in range(len(type_parameter)):
+    # print(len(key_parameter))
+    i = 0
+    for key in range(len(key_parameter)):
 
-        put_value(output_token, token, f'"{type_parameter[i]}":')
+        put_value(output_token, token, f'"{key}":')
 
-        token, output_token = search_variable_number(token, output_token)
+        token, output_token = search_parameter(token, output_token)
 
         # print(f"\n\n\n\n\n\n{model.decode(output_token)}\n\n\n\n\n\n\n")
         try:
@@ -215,7 +215,7 @@ def call_me_maybe(msg):
         except Exception:
             ...
 
-        if i < len(type_parameter) - 1:
+        if i < len(key_parameter) - 1:
             # print(i)
             y = model.encode(f', ')[0].tolist()
             token += y
@@ -228,6 +228,7 @@ def call_me_maybe(msg):
                 return json.loads(model.decode(output_token))
             except Exception:
                 ...
+        i+=1
 
 
         # print(model.decode(output_token))
