@@ -22,22 +22,32 @@ class MyFunctionCall(BaseModel):
 def search_variable_number(
         token: list[int],
         output_token: list[int],
-        constraint: list[int]
         ) -> tuple[list[int], list[int]]:
 
     for _ in range(100):
         ids = model.get_logits_from_input_ids(token)
 
-        if constraint:
-            mask_token(ids, constraint)
 
         next = ids.index(max(ids))
+
+
+        # print(f"\n\n\n\n\n\n\n\n\n{next}{model.decode([next])}\n\n\n\n\n\n\n\n\n\n\n")
+
+
         if next == model.encode(",")[0].tolist()[0]:
+            break
+
+        elif next == model.encode("\",")[0].tolist()[0]:
+            next = model.encode("\"")[0].tolist()[0]
+            output_token.append(next)
+            token.append(next)
             break
 
 
         output_token.append(next)
         token.append(next)
+
+        # print(model.decode(output_token))
 
         try:
             x = model.decode(output_token)
@@ -114,7 +124,7 @@ def put_value(output_token: list[int],token: list[int], value: str) -> None:
     output_token += message_tokenised
     token += message_tokenised
 
-from test import time_decorator
+# from test import time_decorator
 
 
 
@@ -178,10 +188,6 @@ def call_me_maybe(msg):
     token, output_token =  search_name(token, output_token, name, table_name_tokenised)
     function_name = model.decode(output_token).split("\"")[3]
 
-    constraint = {
-        'string': None,
-        'number': [vocab[i] for i in vocab if re.search("^[0-9\-\+.\,\"Ġ]$" ,i)]
-        }
 
     function_selected = select_function(function_name, ft_list)
     parameter = function_selected['parameters']
@@ -189,15 +195,21 @@ def call_me_maybe(msg):
     if not parameter:
         put_value(output_token, token, ', "parameters": null}')
         return json.dump(model.decode(output_token))
+
     type_parameter = [i for i in parameter]
+
+    # print(f"\n\n\n\n\n{type_parameter}\n\n\n\n\n\n")
+
     put_value(output_token, token, ', "parameters": {')
 
     # print(len(type_parameter))
     for i in range(len(type_parameter)):
-        types = function_selected['parameters'][type_parameter[i]]['type'] 
-        put_value(output_token, token, f'"{type_parameter[i]}":')
-        token, output_token = search_variable_number(token, output_token, constraint[types])
 
+        put_value(output_token, token, f'"{type_parameter[i]}":')
+
+        token, output_token = search_variable_number(token, output_token)
+
+        # print(f"\n\n\n\n\n\n{model.decode(output_token)}\n\n\n\n\n\n\n")
         try:
             return json.loads(model.decode(output_token))
         except Exception:
@@ -212,6 +224,11 @@ def call_me_maybe(msg):
             y = model.encode('}}')[0].tolist()
             token += y
             output_token += y
+            try:
+                return json.loads(model.decode(output_token))
+            except Exception:
+                ...
+
 
         # print(model.decode(output_token))
         # else:
@@ -227,10 +244,11 @@ if __name__ == '__main__':
     with open("function_calling_tests.json", "r") as test_file:
         data = json.load(test_file)
 
-    d = []
+    # d = []
+    # print(call_me_maybe('Replace all numbers in "Hello 34 I\'m 233 years old" with NUMBERS'))
     for i in data:
         print(call_me_maybe(i['prompt']))
-        # print(i)
+        print(i)
         # d.append(i)
 
     # print(d)
