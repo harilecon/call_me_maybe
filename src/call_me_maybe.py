@@ -1,9 +1,18 @@
 from .validation_model import MyFuctionDefinition
+from typing import Any
 from llm_sdk import Small_LLM_Model
 from pydantic import ValidationError
 import sys
 import json
 import math
+
+
+try:
+    model = Small_LLM_Model()
+    vocab = model.get_path_to_vocab_file()
+except Exception as e:
+    print(e)
+    sys.exit(-1)
 
 
 def search_variable_number(
@@ -24,7 +33,6 @@ def search_variable_number(
             token.append(next)
             break
 
-
         output_token.append(next)
         token.append(next)
 
@@ -39,11 +47,11 @@ def search_variable_number(
 
 
 def search_name(
-    token,
+    token: list[int],
     output_token: list[int],
-    constraint,
+    constraint: list[int],
     tab_name_tokenised: list[list[int]],
-) -> tuple[list[int], list[int]]:
+) -> tuple[list[int], list[int]] | None:
     tab = tab_name_tokenised.copy()
 
     for index in range(20):
@@ -75,45 +83,39 @@ def search_name(
             output_token.extend(remaining)
             put_value(output_token, token, "\" ")
 
-            return token, output_token
+            return (token, output_token)
+    return None
 
 
-def select_function(function_name: str, ft_list: list) -> list[str]:
+def select_function(
+        function_name: str,
+        ft_list: list[list[Any]]
+        ) -> list[Any] | None:
     for i in range(len(ft_list)):
         if ft_list[i]['name'] == function_name:
             return ft_list[i]
+    return None
 
 
-try:
-    model = Small_LLM_Model()
-    vocab = model.get_path_to_vocab_file()
-except Exception as e:
-    print(e)
-    sys.exit(-1)
-
-
-def mask_token(ids: list[float], valid: list):
+def mask_token(ids: list[float], valid: list) -> None:
     for i in range(len(ids)):
         if i not in valid:
             ids[i] = -math.inf
 
 
-def put_value(output_token: list[int],token: list[int], value: str) -> None:
+def put_value(output_token: list[int], token: list[int], value: str) -> None:
     message_tokenised = model.encode(value)[0].tolist()
     output_token += message_tokenised
     token += message_tokenised
 
 
-def call_me_maybe(msg):
+def call_me_maybe(msg: str):
     try:
         ft_list = []
         with open("data/input/functions_definition.json", "r") as test_file:
-                data = json.load(test_file)
-                for ft in data:
-                    ft_list.append(MyFuctionDefinition(**ft).model_dump())
-
-        with open(model.get_path_to_vocab_file(), "r") as f:
-            vocab = json.load(f)
+            data = json.load(test_file)
+            for ft in data:
+                ft_list.append(MyFuctionDefinition(**ft).model_dump())
 
     except json.decoder.JSONDecodeError as e:
         print("error on Json convertion")
@@ -139,10 +141,12 @@ def call_me_maybe(msg):
     User request: 'what's the sum of 2,0 and 3,5'
     Output: {ex}
     User request: {msg}
-    Output: 
+    Output:
     """
 
-    table_name_tokenised = [model.encode(ft['name'])[0].tolist() for ft in ft_list]
+    table_name_tokenised = [
+        model.encode(ft['name'])[0].tolist() for ft in ft_list
+        ]
     name = [tok for name_tok in table_name_tokenised for tok in name_tok]
     name.append(model.encode("\"")[0].tolist()[0])
 
@@ -151,7 +155,12 @@ def call_me_maybe(msg):
 
     put_value(output_token, token, '{"name": "')
 
-    token, output_token =  search_name(token, output_token, name, table_name_tokenised)
+    token, output_token = search_name(
+        token,
+        output_token,
+        name,
+        table_name_tokenised
+        )
     function_name = model.decode(output_token).split("\"")[3]
 
     function_selected = select_function(function_name, ft_list)
@@ -176,7 +185,7 @@ def call_me_maybe(msg):
             ...
 
         if i < len(type_parameter) - 1:
-            y = model.encode(f', ')[0].tolist()
+            y = model.encode(', ')[0].tolist()
             token += y
             output_token += y
         else:

@@ -8,7 +8,8 @@ class MyFuctionDefinition(BaseModel):
     parameters: Annotated[dict | None, Field(default=None)]
     returns: Annotated[dict | None, Field(default=None)]
 
+
 class MyFunctionCall(BaseModel):
     prompt: Annotated[str, Field(..., ge=1)]
-    name: Annotated[str, Field(...)] 
+    name: Annotated[str, Field(...)]
     parameters: Annotated[dict | None, Field(...)]

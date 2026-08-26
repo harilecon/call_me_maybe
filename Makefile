@@ -1,10 +1,11 @@
 PYTHON = uv run python
+MYPY_FLAGS = --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 FILE = src/*\
 	   main.py
 
 
 run: install
-	$(PYTHON)
+	$(PYTHON) main.py
 
 
 install:

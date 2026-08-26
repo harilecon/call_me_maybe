@@ -9,15 +9,12 @@ if __name__ == '__main__':
         # data = json.load(test_file)
         data = json.loads(test_file.read())
 
-
-
-    d = []
+    final_dict = []
     for i in data:
         x = call_me_maybe(i['prompt'])
         print(x)
         print(f"\ntook {time.time() - start}\n\n")
-        d.append(x)
+        final_dict.append(x)
 
-    print(d)
+    print(final_dict)
     print(f"\ntotal {time.time() - start}\n\n")
-    
