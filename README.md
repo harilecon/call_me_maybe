@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by <b>tsitoand</b>*
+*This project has been created as part of the 42 curriculum by <b>tsitoand</b>*.
 
 > ... Hey, I just met you, and this is crazy
 But here's my number, so
@@ -8,7 +8,7 @@ But here's my number, so
 <p align="center">
   <img
     src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmFyN3IzdzloOGh0ZjRna2R5cHB5YnN0Y2g0a25tZHpjeWNhZHlkNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/eJuyczQANvtGgaeakw/giphy.gif"
-    alt="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmFyN3IzdzloOGh0ZjRna2R5cHB5YnN0Y2g0a25tZHpjeWNhZHlkNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/eJuyczQANvtGgaeakw/giphy.gif"
+    alt=""
   >
 </p>
 
@@ -26,7 +26,7 @@ For this project, we use **Qwen/Qwen3-0.6B**, a lightweight language model, as t
 git clone https://github.com/harilecon/call_me_maybe.git
 ```
 
-
+before installation assure that you have enougth space `>10Gb`
 ```shell
 # install dependency
 make install
@@ -48,14 +48,9 @@ make lint-strict
 
 
 ### Resources
-
-
-
-
-Resources
 * YouTube videos — Additional video resources related to the project.
 * [Hugging Face](https://huggingface.co/) — Resources and models used for the project.
-[Astral UV Documentation](https://docs.astral.sh/uv/) — Learn how to install, use, and understand uv.
+* [Astral UV Documentation](https://docs.astral.sh/uv/) — Learn how to install, use, and understand uv.
 
 
 #### AI Usage
