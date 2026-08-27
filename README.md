@@ -1,9 +1,22 @@
 *This project has been created as part of the 42 curriculum by <b>tsitoand</b>*.
 
-> ... Hey, I just met you, and this is crazy
+<blockquote>
+ ... Hey, I just met you, and this is crazy
 But here's my number, so
+</blockquote>
 
-# <p style="color: #FFFF;">call me maybe</p>
+<div align="center">
+  <h1 style="color: #ffffff; font-size:60">call me maybe</h1>
+<div align="center">
+
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![LLM](https://img.shields.io/badge/LLM-Qwen3--0.6B-7C3AED?style=flat-square&logo=qwen)
+![JSON](https://img.shields.io/badge/Output-JSON-000000?style=flat-square&logo=json&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic-Validation-E92063?style=flat-square&logo=pydantic&logoColor=white)
+
+</div>
+</div>
+
 
 <p align="center">
   <img
@@ -14,7 +27,7 @@ But here's my number, so
 
 ## Project Description
 
-A function call is a mechanism that allows a computer program or an AI model to execute a specific function, tool, or API. In the context of AI, function calling enables a language model to generate structured data that can trigger external actions rather than simply producing plain text.
+A **function call** is a mechanism that allows a computer program or an AI model to execute a specific function, tool, or API. In the context of AI, function calling enables a language model to generate structured data that can trigger external actions rather than simply producing plain text.
 
 The goal of this project is to master **constrained decoding** in order to guide a Large Language Model (LLM) and force it to generate valid JSON output for function calls.
 
