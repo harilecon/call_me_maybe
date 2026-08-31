@@ -64,6 +64,7 @@ make lint-strict
 * YouTube videos — Additional video resources related to the project.
 * [Hugging Face](https://huggingface.co/) — Resources and models used for the project.
 * [Astral UV Documentation](https://docs.astral.sh/uv/) — Learn how to install, use, and understand uv.
+* google collab: where i tested my code
 
 
 #### AI Usage
