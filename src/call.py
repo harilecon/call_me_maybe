@@ -9,7 +9,6 @@ import math
 
 
 try:
-    argument = parse_input()
     model = Small_LLM_Model()
 except Exception as e:
     print(e)
@@ -110,10 +109,13 @@ def _put_value(output_token: list[int], token: list[int], value: str) -> None:
     token += message_tokenised
 
 
-def call_me_maybe(msg: str):
+def call_me_maybe(
+    msg: str,
+    functions_definition: str
+    ):
     try:
         ft_list = []
-        with open(argument['functions_definition'], "r") as f:
+        with open(functions_definition, "r") as f:
             data = json.load(f)
             for ft in data:
                 ft_list.append(MyFuctionDefinition(**ft).model_dump())
@@ -133,14 +135,14 @@ def call_me_maybe(msg: str):
         print(e)
         sys.exit(-1)
 
-    ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
+    exemple = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
     prompt = f"""
     Select the appropriate function from the available functions
     and extract its arguments from the user's request.
     Available functions: {ft_list}
     Example:
     User request: 'what's the sum of 2,0 and 3,5'
-    Output: {ex}
+    Output: {exemple}
     User request: {msg}
     Output:
     """
