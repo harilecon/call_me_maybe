@@ -1,20 +1,19 @@
-PYTHON = uv run python
+PYTHON = uv run uv run --python 3.12.5 python
 MYPY_FLAGS = --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 FILE = src/*\
 	   main.py
 
 
 run: install
-	$(PYTHON) main.py
+	$(PYTHON) -m src
 
 
 install:
-	uv sync
+	uv sync --python 3.12.5
 
 
 debug:
-	$(PYTHON) -m pdb main.py
-
+	$(PYTHON) -m pdb src
 
 clean:
 	find . -type d -name "__pycache__" -prune -exec rm -rf {} \;
