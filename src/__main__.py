@@ -36,18 +36,19 @@ def call_me():
         try:
             with open(argument['input'], 'r') as f:
                 prompt_file = json.load(f)
-                
         except OSError as e:
+            print("explosssssion")
             print(e)
             sys.exit(-1)
         
         final = [] 
+        
         for prompt in prompt_file:
-            prompt.update(call_me_maybe(prompt, functions_definition))
-            MyFunctionCall(**prompt)
-            print(prompt)
-            final.append(prompt)
+            print("manomboka eto")
+            print(call_me_maybe(prompt, functions_definition))
+            print(final)
     except Exception as e:
+        print("ary ato?")
         print(e)
         sys.exit(-1)
         

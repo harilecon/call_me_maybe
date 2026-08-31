@@ -115,10 +115,8 @@ def call_me_maybe(
     ):
     try:
         ft_list = []
-        with open(functions_definition, "r") as f:
-            data = json.load(f)
-            for ft in data:
-                ft_list.append(MyFuctionDefinition(**ft).model_dump())
+        for ft in functions_definition:
+            ft_list.append(MyFuctionDefinition(**ft).model_dump())
 
     except json.decoder.JSONDecodeError as e:
         print("error on Json convertion")
