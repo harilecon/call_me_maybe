@@ -16,9 +16,10 @@ def call_me_maybe(
     def _search_variable_number(
             token: list[int],
             output_token: list[int],
+            type_parameter: str,
             ) -> tuple[list[int], list[int]]:
 
-        for _ in range(100):
+        for _ in range(20):
             ids = model.get_logits_from_input_ids(token)
             next = ids.index(max(ids))
 
@@ -29,17 +30,24 @@ def call_me_maybe(
                 next = model.encode("\"")[0].tolist()[0]
                 output_token.append(next)
                 token.append(next)
-                break
+                return (token, output_token)
 
             output_token.append(next)
             token.append(next)
+        
 
             try:
                 x = model.decode(output_token)
                 json.loads(x)
-                break
+                return (token, output_token)
+
             except Exception:
                 ...
+
+        if type_parameter == 'string':
+                next = model.encode("\"")[0].tolist()[0]
+                output_token.append(next)
+                token.append(next)
 
         return (token, output_token)
 
@@ -107,7 +115,6 @@ def call_me_maybe(
         token += message_tokenised
 
     try:
-        print(f"user = \"{msg}\"")
         ft_list = []
         for ft in functions_definition:
             ft_list.append(MyFuctionDefinition(**ft).model_dump())
@@ -172,7 +179,7 @@ def call_me_maybe(
 
     for i in range(len(type_parameter)):
         _put_value(output_token, token, f'"{type_parameter[i]}":')
-        token, output_token = _search_variable_number(token, output_token)
+        token, output_token = _search_variable_number(token, output_token, parameter[type_parameter[0]]['type'])
 
         try:
             return json.loads(model.decode(output_token))
