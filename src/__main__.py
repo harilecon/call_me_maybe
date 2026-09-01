@@ -7,7 +7,7 @@ import sys
 from llm_sdk import Small_LLM_Model
 
 
-def call_me():
+def call_me() -> None:
     try:
         argument = parse_input()
         try:
@@ -32,7 +32,7 @@ def call_me():
         try:
             model = Small_LLM_Model(model_name=argument['llm'])
         except Exception as e:
-            print("error with the module llm_Sdk")
+            print("error witsrc/call.py:3:h the module llm_Sdk")
             print(e)
             sys.exit(-1)
 

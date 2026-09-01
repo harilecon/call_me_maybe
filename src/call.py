@@ -11,7 +11,7 @@ def call_me_maybe(
         msg: str,
         functions_definition: str,
         model: Small_LLM_Model
-):
+) -> str:
 
     def _search_variable_number(
             token: list[int],
@@ -95,7 +95,8 @@ def call_me_maybe(
             ft_list: list[list[Any]]
             ) -> list[Any] | None:
         for i in range(len(ft_list)):
-            if ft_list[i]['name'] == function_name:
+            my_fuction = ft_list[i]
+            if my_fuction['name'] == function_name:
                 return ft_list[i]
         return None
 

@@ -28,4 +28,4 @@ lint:
 
 lint-strict:
 	$(PYTHON) -m flake8 $(FILE)
-	$(PYTHON) -m mypy $(FILE) --strict
+	$(PYTHON) -m mypy $(FILE) --strict $(MYPY_FLAGS)
