@@ -136,6 +136,7 @@ graph TD
 * Qwen/Qwen3-1.7B
 * HuggingFaceTB/SmolLM2-1.7B-Instruct
 * uggingFaceTB/SmolLM2-360M-Instruct
+* ibm-granite/granite-3.3-2b-instruct
 
 
 #### other LLM 
@@ -143,7 +144,6 @@ graph TD
 * tiiuae/Falcon3-3B-Instruct
 * microsoft/Phi-3.5-mini-instruct
 * microsoft/Phi-4-mini-instruct
-* ibm-granite/granite-3.3-2b-instruct
 * ibm-granite/granite-3.3-8b-instruct
 * TinyLlama/TinyLlama-1.1B-Chat-v1.0
 * TinyLlama/TinyLlama-1.1B-Chat-v1.0

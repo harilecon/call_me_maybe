@@ -3,8 +3,8 @@ from typing import Annotated
 
 
 class MyFuctionDefinition(BaseModel):
-    name: Annotated[str, Field(...)]
-    description: Annotated[str, Field(...)]
+    name: Annotated[str, Field(..., min_length=3)]
+    description: Annotated[str, Field(..., min_length=10)]
     parameters: Annotated[dict | None, Field(default=None)]
     returns: Annotated[dict | None, Field(default=None)]
 

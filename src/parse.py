@@ -6,6 +6,7 @@ class ParseResult(TypedDict):
     functions_definition: str
     input: str
     output: str
+    llm: str
     
 
 def parse_input() -> ParseResult:
@@ -32,12 +33,20 @@ def parse_input() -> ParseResult:
         help='paht the output file'
     )
 
+    parse.add_argument(
+        '-llm',
+        type=str,
+        default="Qwen/Qwen3-0.6B",
+        help='model with what you want to test'
+    )
+
     argument = parse.parse_args()
     
     return {
         'functions_definition': argument.functions_definition,
         'input': argument.input,
-        'output': argument.output
+        'output': argument.output,
+        'llm': argument.llm
             }
     
 if __name__ == '__main__':

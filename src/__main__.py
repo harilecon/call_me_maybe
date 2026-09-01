@@ -1,12 +1,10 @@
 from .call import call_me_maybe
 import json
 from .parse import parse_input
-from pydantic import BaseModel
 from .validation_model import MyFuctionDefinition, MyFunctionCall
 from pydantic import ValidationError, Field
-from typing import Annotated
 import sys
-import time
+from llm_sdk import Small_LLM_Model
 
 
 
@@ -31,10 +29,17 @@ def call_me():
             print(e)
             sys.exit(-1)
         
-        final = [] 
+        final = []
+        try:
+            model = Small_LLM_Model(model_name=argument['llm'])
+        except Exception as e:
+            print("error with the module llm_Sdk")
+            print(e)
+            sys.exit(-1)
+
         for prompt in prompt_file:
             try:
-                prompt.update(call_me_maybe(prompt['prompt'], functions_definition))
+                prompt.update(call_me_maybe(prompt['prompt'], functions_definition, model))
                 validate = MyFunctionCall(**prompt)
             except ValidationError as e:
                 print("error on validation of the returned function call")
