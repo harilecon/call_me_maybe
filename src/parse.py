@@ -1,4 +1,4 @@
-from typing import TypedDict 
+from typing import TypedDict
 import argparse
 
 
@@ -7,7 +7,7 @@ class ParseResult(TypedDict):
     input: str
     output: str
     llm: str
-    
+
 
 def parse_input() -> ParseResult:
     parse = argparse.ArgumentParser()
@@ -41,13 +41,14 @@ def parse_input() -> ParseResult:
     )
 
     argument = parse.parse_args()
-    
+
     return {
         'functions_definition': argument.functions_definition,
         'input': argument.input,
         'output': argument.output,
         'llm': argument.llm
             }
-    
+
+
 if __name__ == '__main__':
     print(parse_input())

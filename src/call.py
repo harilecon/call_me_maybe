@@ -8,10 +8,10 @@ import math
 
 
 def call_me_maybe(
-    msg: str,
-    functions_definition: str,
-    model: Small_LLM_Model
-    ):
+        msg: str,
+        functions_definition: str,
+        model: Small_LLM_Model
+):
 
     def _search_variable_number(
             token: list[int],
@@ -34,7 +34,6 @@ def call_me_maybe(
 
             output_token.append(next)
             token.append(next)
-        
 
             try:
                 x = model.decode(output_token)
@@ -45,12 +44,11 @@ def call_me_maybe(
                 ...
 
         if type_parameter == 'string':
-                next = model.encode("\"")[0].tolist()[0]
-                output_token.append(next)
-                token.append(next)
+            next = model.encode("\"")[0].tolist()[0]
+            output_token.append(next)
+            token.append(next)
 
         return (token, output_token)
-
 
     def _search_name(
         token: list[int],
@@ -92,7 +90,6 @@ def call_me_maybe(
                 return (token, output_token)
         return None
 
-
     def _select_function(
             function_name: str,
             ft_list: list[list[Any]]
@@ -102,14 +99,16 @@ def call_me_maybe(
                 return ft_list[i]
         return None
 
-
     def _mask_token(ids: list[float], valid: list) -> None:
         for i in range(len(ids)):
             if i not in valid:
                 ids[i] = -math.inf
 
-
-    def _put_value(output_token: list[int], token: list[int], value: str) -> None:
+    def _put_value(
+            output_token: list[int],
+            token: list[int],
+            value: str
+    ) -> None:
         message_tokenised = model.encode(value)[0].tolist()
         output_token += message_tokenised
         token += message_tokenised
@@ -179,7 +178,11 @@ def call_me_maybe(
 
     for i in range(len(type_parameter)):
         _put_value(output_token, token, f'"{type_parameter[i]}":')
-        token, output_token = _search_variable_number(token, output_token, parameter[type_parameter[0]]['type'])
+        token, output_token = _search_variable_number(
+            token,
+            output_token,
+            parameter[type_parameter[0]]['type']
+            )
 
         try:
             return json.loads(model.decode(output_token))
