@@ -4,7 +4,7 @@ from .parse import parse_input
 from .validation_model import MyFuctionDefinition, MyFunctionCall
 from pydantic import ValidationError
 import sys
-from llm_sdk import Small_LLM_Model
+from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 
 
 def call_me() -> None:

@@ -1,6 +1,6 @@
 from .validation_model import MyFuctionDefinition
 from typing import Any
-from llm_sdk import Small_LLM_Model
+from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 from pydantic import ValidationError
 import sys
 import json
