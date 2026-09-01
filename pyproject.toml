@@ -12,10 +12,8 @@ dependencies = [
     "pydantic>=2.13.4",
 ]
 
-[tool.uv.workspace]
-members = [
-    "llm_sdk",
-]
-
 [tool.uv.sources]
-llm-sdk = { workspace = true }
+llm-sdk = { path = "llm_sdk" }
+
+[tool.uv]
+python-preference = "only-managed"

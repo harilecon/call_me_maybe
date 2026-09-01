@@ -9,9 +9,9 @@ import math
 
 def call_me_maybe(
         msg: str,
-        functions_definition: str,
+        functions_definition: Any,
         model: Small_LLM_Model
-) -> str:
+) -> Any:
 
     def _search_variable_number(
             token: list[int],
@@ -92,15 +92,15 @@ def call_me_maybe(
 
     def _select_function(
             function_name: str,
-            ft_list: list[list[Any]]
-            ) -> list[Any] | None:
+            ft_list: list[dict[str, Any]]
+            ) -> dict[str, Any] | None:
         for i in range(len(ft_list)):
-            my_fuction = ft_list[i]
+            my_fuction: dict[str, Any] = ft_list[i]
             if my_fuction['name'] == function_name:
                 return ft_list[i]
         return None
 
-    def _mask_token(ids: list[float], valid: list) -> None:
+    def _mask_token(ids: list[float], valid: list[int]) -> None:
         for i in range(len(ids)):
             if i not in valid:
                 ids[i] = -math.inf
@@ -152,20 +152,32 @@ def call_me_maybe(
     name = [tok for name_tok in table_name_tokenised for tok in name_tok]
     name.append(model.encode("\"")[0].tolist()[0])
 
-    output_token = []
+    output_token: list[int] = []
     token = model.encode(prompt)[0].tolist()
 
     _put_value(output_token, token, '{"name": "')
-
-    token, output_token = _search_name(
+    name_found = _search_name(
         token,
         output_token,
         name,
         table_name_tokenised
         )
+    if not name_found:
+        print("error on name research")
+        sys.exit(-1)
+
+    token, output_token = name_found
+
     function_name = model.decode(output_token).split("\"")[3]
 
-    function_selected = _select_function(function_name, ft_list)
+    function_selected = _select_function(
+        function_name,
+        ft_list
+        )
+    if not function_selected:
+        print("no function selected")
+        sys.exit(-1)
+
     parameter = function_selected['parameters']
 
     if not parameter:
