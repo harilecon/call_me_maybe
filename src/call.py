@@ -1,5 +1,4 @@
 from .validation_model import MyFuctionDefinition
-from .parse import parse_input, ParseResult
 from typing import Any
 from llm_sdk import Small_LLM_Model
 from pydantic import ValidationError
@@ -114,6 +113,7 @@ def call_me_maybe(
     functions_definition: str
     ):
     try:
+        print(f"user = \"{msg}\"")
         ft_list = []
         for ft in functions_definition:
             ft_list.append(MyFuctionDefinition(**ft).model_dump())

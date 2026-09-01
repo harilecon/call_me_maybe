@@ -2,22 +2,13 @@ from .call import call_me_maybe
 import json
 from .parse import parse_input
 from pydantic import BaseModel
-# from validation_model import MyFuctionDefinition, MyFunctionCall
+from .validation_model import MyFuctionDefinition, MyFunctionCall
 from pydantic import ValidationError, Field
 from typing import Annotated
 import sys
-
-class MyFuctionDefinition(BaseModel):
-    name: Annotated[str, Field(..., min_length=3)]
-    description: Annotated[str, Field(..., min_length=10)]
-    parameters: Annotated[dict | None, Field(default=None)]
-    returns: Annotated[dict | None, Field(default=None)]
+import time
 
 
-class MyFunctionCall(BaseModel):
-    prompt: Annotated[str, Field(...)]
-    name: Annotated[str, Field(...)]
-    parameters: Annotated[dict | None, Field(...)]
 
 def call_me():
     try:
@@ -37,21 +28,32 @@ def call_me():
             with open(argument['input'], 'r') as f:
                 prompt_file = json.load(f)
         except OSError as e:
-            print("explosssssion")
             print(e)
             sys.exit(-1)
         
         final = [] 
-        
         for prompt in prompt_file:
-            print("manomboka eto")
-            print(call_me_maybe(prompt, functions_definition))
-            print(final)
+            try:
+                prompt.update(call_me_maybe(prompt['prompt'], functions_definition))
+                validate = MyFunctionCall(**prompt)
+            except ValidationError as e:
+                print("error on validation of the returned function call")
+                print(f"prompt = \"{prompt}\"")
+                print("got from the llm:")
+                print(prompt)
+                print(e)
+            prompt.update(validate)
+            final.append(prompt)
+            print(json.dumps(str(prompt), indent=2))
+            print("\n\n")
+        print(final)
     except Exception as e:
-        print("ary ato?")
         print(e)
         sys.exit(-1)
         
         
 if __name__ == '__main__':
-    call_me()
+    try:
+        call_me()
+    except KeyboardInterrupt:
+        print("your are the boss")
