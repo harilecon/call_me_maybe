@@ -11,7 +11,7 @@
       }
     },
     "returns": {
-      "type": "string"
+      "type": "number"
     }
   },
   {

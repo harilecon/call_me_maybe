@@ -1,7 +1,7 @@
 """_summary_."""
 from typing import Any
-from .call import call_me_maybe
-from .parse import parse_input
+from .call_me_maybe import call_me_maybe
+from .parse_input_parameter import parse_input
 from .validation_model import (MyFuctionDefinition,
                                MyFunctionCall,
                                ValidateParameter)

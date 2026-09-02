@@ -16,7 +16,7 @@ def call_me_maybe(
         model: Small_LLM_Model
 ) -> Any:
 
-    def _search_variable_number(
+    def _search_variable(
             token: list[int],
             output_token: list[int],
             type_parameter: str,
@@ -184,7 +184,7 @@ def call_me_maybe(
 
     for i in range(len(type_parameter)):
         _put_value(output_token, token, f'"{type_parameter[i]}":')
-        token, output_token = _search_variable_number(
+        token, output_token = _search_variable(
             token,
             output_token,
             parameter[type_parameter[0]]['type']
