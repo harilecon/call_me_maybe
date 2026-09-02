@@ -1,12 +1,25 @@
 """_summary_."""
-
+from typing import Any
 from .call import call_me_maybe
-import json
 from .parse import parse_input
-from .validation_model import MyFuctionDefinition, MyFunctionCall
+from .validation_model import (MyFuctionDefinition,
+                               MyFunctionCall,
+                               ValidateParameter)
 from pydantic import ValidationError
-import sys
 from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
+import json
+import sys
+import os
+
+
+def validate_fuction_definition(parameter: dict[str, Any]) -> None:
+    first_validation = MyFuctionDefinition(**parameter).model_dump()
+    if first_validation['parameters']:
+        for value in first_validation['parameters']:
+            ValidateParameter(**first_validation['parameters'][value])
+
+        for value in first_validation['returns']:
+            ValidateParameter(**first_validation['returns'])
 
 
 def call_me() -> None:
@@ -17,7 +30,7 @@ def call_me() -> None:
                 functions_definition = json.load(f)
 
             for function in functions_definition:
-                MyFuctionDefinition(**function)
+                validate_fuction_definition(function)
         except ValidationError:
             print("the following funtion definition is invalid")
             print(function)
@@ -64,6 +77,11 @@ def call_me() -> None:
             print(json.dumps(prompt, indent=2))
 
         try:
+            default = "data/output/function_calling_results.json"
+            if default == argument['output']:
+                if not os.path.exists("data/output"):
+                    os.mkdir("data/output")
+
             with open(argument['output'], 'w') as file:
                 json.dump(final, file, indent=2)
         except OSError as e:

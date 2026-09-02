@@ -34,12 +34,67 @@ The goal of this project is to master **constrained decoding** in order to guide
 For this project, we use **Qwen/Qwen3-0.6B**, a lightweight language model, as the base model.
 
 ## Instructions
+
+## Prerequisites
+* <b>python3</b>
+
+* `uv`
+
+* At least `10Gb` stockage free on your disk 
+
+## Configuration file
+
+The configuration file must be a valid JSON file.
+Each function definition must contain at least the following fields:
+
+```json
+  {
+    "name": "fn_add_numbers",
+    "description": "Add two numbers together and return their sum.",
+    "parameters": {
+      "a": {
+        "type": "number"
+      },
+      "b": {
+        "type": "number"
+      }
+    },
+    "returns": {
+      "type": "number"
+    }
+  }
+```
+
+### Fields
+
+| Field         | Type             | Description                            |
+| ------------- | ---------------- | -------------------------------------- |
+| `name`        | `string`         | Name of the function.                  |
+| `description` | `string`         | Description of what the function does. |
+| `parameters`  | `object \| null` | Parameters expected by the function.   |
+| `returns`     | `object \| null` | Value returned by the function.        |
+
+`parameters` and `returns` can be set to `null` when the function does not require parameters or does not return a value.
+
+### Example
+
+```json
+{
+    "name": "fn_reboot",
+    "description": "Reboot a server whenever an event occurs",
+    "parameters": null,
+    "returns": null
+}
+```
+
+The `name` and `description` fields are required. `parameters` and `returns` must also be present, but their value can be `null`.
+
+
 ```shell
 # clone the repos
 git clone https://github.com/harilecon/call_me_maybe.git
 ```
 
-before installation assure that you have enougth space `>10Gb`
 ```shell
 # install dependency
 make install
@@ -58,7 +113,6 @@ make lint
 # check flake8 and mypy --strict
 make lint-strict
 ```
-
 
 ### Resources
 * YouTube videos — Additional video resources related to the project.
