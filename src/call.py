@@ -122,18 +122,8 @@ def call_me_maybe(
         for ft in functions_definition:
             ft_list.append(MyFuctionDefinition(**ft).model_dump())
 
-    except json.decoder.JSONDecodeError as e:
-        print("error on Json convertion")
-        print(e)
-        sys.exit(-1)
-
-    except OSError as e:
-        print("error opening the file")
-        print(e)
-        sys.exit(-1)
-
     except ValidationError as e:
-        print("Validation Error")
+        print("there is a invalid definition in the function definition file")
         print(e)
         sys.exit(-1)
 
@@ -167,7 +157,7 @@ def call_me_maybe(
         )
     if not name_found:
         print("error on name research")
-        sys.exit(-1)
+        return None
 
     token, output_token = name_found
 
@@ -179,7 +169,7 @@ def call_me_maybe(
         )
     if not function_selected:
         print("no function selected")
-        sys.exit(-1)
+        return None
 
     parameter = function_selected['parameters']
 

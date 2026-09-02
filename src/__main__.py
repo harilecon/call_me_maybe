@@ -34,19 +34,24 @@ def call_me() -> None:
         try:
             model = Small_LLM_Model(model_name=argument['llm'])
         except Exception as e:
-            print("error witsrc/call.py:3:h the module llm_Sdk")
+            print("error wit the module llm_Sdk")
             print(e)
             sys.exit(-1)
 
         for prompt in prompt_file:
             try:
-                prompt.update(
-                    call_me_maybe(
-                        prompt['prompt'],
-                        functions_definition,
-                        model
-                        )
-                    )
+                your_call = call_me_maybe(
+                                prompt['prompt'],
+                                functions_definition,
+                                model
+                                )
+
+                if not your_call:
+                    print("error with this call")
+                    print(prompt)
+                    continue
+
+                prompt.update(your_call)
                 validate = MyFunctionCall(**prompt)
             except ValidationError as e:
                 print("error on validation of the returned function call")
@@ -57,7 +62,7 @@ def call_me() -> None:
             prompt.update(validate)
             final.append(prompt)
             print(json.dumps(prompt, indent=2))
-        # print(json.dumps(final, indent=2))
+
         try:
             with open(argument['output'], 'w') as file:
                 json.dump(final, file, indent=2)
@@ -73,4 +78,4 @@ if __name__ == '__main__':
     try:
         call_me()
     except KeyboardInterrupt:
-        print("your are the boss")
+        print("\nOk the boss")
