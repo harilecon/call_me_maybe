@@ -1,3 +1,6 @@
+"""docstring."""
+
+
 from .validation_model import MyFuctionDefinition
 from typing import Any
 from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]

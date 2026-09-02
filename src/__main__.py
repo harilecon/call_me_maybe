@@ -1,3 +1,5 @@
+"""_summary_."""
+
 from .call import call_me_maybe
 import json
 from .parse import parse_input
@@ -54,9 +56,14 @@ def call_me() -> None:
                 print(e)
             prompt.update(validate)
             final.append(prompt)
-            print(json.dumps(str(prompt), indent=2))
-            print("\n\n")
-        print(final)
+            print(json.dumps(prompt, indent=2))
+        # print(json.dumps(final, indent=2))
+        try:
+            with open(argument['output'], 'w') as file:
+                json.dump(final, file, indent=2)
+        except OSError as e:
+            print(e)
+
     except Exception as e:
         print(e)
         sys.exit(-1)

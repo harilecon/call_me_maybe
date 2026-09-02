@@ -29,7 +29,7 @@ def parse_input() -> ParseResult:
     parse.add_argument(
         '-output',
         type=str,
-        default='output/function_calling_results',
+        default='data/output/function_calling_results.json',
         help='paht the output file'
     )
 
