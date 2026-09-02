@@ -22,6 +22,7 @@ def call_me_maybe(
             type_parameter: str,
             ) -> tuple[list[int], list[int]]:
 
+
         for _ in range(20):
             ids = model.get_logits_from_input_ids(token)
             next = ids.index(max(ids))
@@ -60,6 +61,9 @@ def call_me_maybe(
         tab_name_tokenised: list[list[int]],
     ) -> tuple[list[int], list[int]] | None:
         tab = tab_name_tokenised.copy()
+        test = []
+
+        forbiden = model.encode("\"")[0].tolist()
 
         for index in range(20):
             ids = model.get_logits_from_input_ids(token)
@@ -67,9 +71,10 @@ def call_me_maybe(
             _mask_token(ids, constraint)
             next_token = ids.index(max(ids))
 
-            token.append(next_token)
-            output_token.append(next_token)
-
+            if next_token != forbiden[0]:
+              token.append(next_token)
+              output_token.append(next_token)
+            
             tmp = []
             for name_tokenised in tab:
                 if (
@@ -78,19 +83,27 @@ def call_me_maybe(
                 ):
                     tmp.append(name_tokenised)
 
+                elif test == name_tokenised:
+                    tmp.append(name_tokenised)
             tab = tmp
+            # print(tab)
+            # print(f"test={test}")
+            # print("\n\n\n")
+
 
             if not tab:
                 raise ValueError("No name found for the prompt")
 
             if len(tab) == 1:
-                remaining = tab[0][index + 1:]
-
-                token.extend(remaining)
-                output_token.extend(remaining)
+                # print(f" tab[0] = {model.decode(tab[0])}")
+     
+                # token.extend(tab[0])
+                # output_token.extend(tab[0])
                 _put_value(output_token, token, "\" ")
 
                 return (token, output_token)
+
+            test.append(next_token)
         return None
 
     def _select_function(
@@ -136,8 +149,7 @@ def call_me_maybe(
     User request: 'what's the sum of 2,0 and 3,5'
     Output: {exemple}
     User request: {msg}
-    Output:
-    """
+    Output:"""
 
     table_name_tokenised = [
         model.encode(ft['name'])[0].tolist() for ft in ft_list
@@ -149,12 +161,16 @@ def call_me_maybe(
     token = model.encode(prompt)[0].tolist()
 
     _put_value(output_token, token, '{"name": "')
+ 
+ 
     name_found = _search_name(
         token,
         output_token,
         name,
         table_name_tokenised
         )
+
+
     if not name_found:
         print("error on name research")
         return None
@@ -175,7 +191,6 @@ def call_me_maybe(
 
     if not parameter:
         _put_value(output_token, token, ', "parameters": null}')
-        print(model.decode(output_token))
         return json.loads(model.decode(output_token))
 
     type_parameter = [i for i in parameter]
@@ -183,6 +198,7 @@ def call_me_maybe(
     _put_value(output_token, token, ', "parameters": {')
 
     for i in range(len(type_parameter)):
+
         _put_value(output_token, token, f'"{type_parameter[i]}":')
         token, output_token = _search_variable(
             token,

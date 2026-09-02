@@ -1,0 +1,596 @@
+[
+  {
+    "name": "fn_add_numbers",
+    "description": "Add two numbers together and return their sum.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_subtract_numbers",
+    "description": "Subtract the second number from the first number.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_multiply_numbers",
+    "description": "Multiply two numbers together and return the result.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_divide_numbers",
+    "description": "Divide the first number by the second number.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_square",
+    "description": "Calculate the square of a number.",
+    "parameters": {
+      "a": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_cube",
+    "description": "Calculate the cube of a number.",
+    "parameters": {
+      "a": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_absolute",
+    "description": "Return the absolute value of a number.",
+    "parameters": {
+      "a": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_maximum",
+    "description": "Return the larger value between two numbers.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_minimum",
+    "description": "Return the smaller value between two numbers.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_average",
+    "description": "Calculate the average of two numbers.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_square_root",
+    "description": "Calculate the square root of a number.",
+    "parameters": {
+      "a": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_percentage",
+    "description": "Calculate a percentage of a given number.",
+    "parameters": {
+      "value": {"type": "number"},
+      "percentage": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_power",
+    "description": "Raise a number to a given power.",
+    "parameters": {
+      "base": {"type": "number"},
+      "exponent": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_convert_celsius_to_fahrenheit",
+    "description": "Convert a temperature from Celsius to Fahrenheit.",
+    "parameters": {
+      "celsius": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_convert_fahrenheit_to_celsius",
+    "description": "Convert a temperature from Fahrenheit to Celsius.",
+    "parameters": {
+      "fahrenheit": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_distance",
+    "description": "Calculate the distance between two numerical positions.",
+    "parameters": {
+      "x1": {"type": "number"},
+      "x2": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_add_three_numbers",
+    "description": "Add three numbers together and return their sum.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"},
+      "c": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_multiply_three_numbers",
+    "description": "Multiply three numbers together and return the result.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"},
+      "c": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_greet",
+    "description": "Generate a greeting message for a person by name.",
+    "parameters": {
+      "name": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_reverse_string",
+    "description": "Reverse a string and return the reversed result.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_to_uppercase",
+    "description": "Convert a string to uppercase letters.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_to_lowercase",
+    "description": "Convert a string to lowercase letters.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_trim_string",
+    "description": "Remove leading and trailing whitespace from a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_concatenate_strings",
+    "description": "Join two strings together into a single string.",
+    "parameters": {
+      "a": {"type": "string"},
+      "b": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_repeat_string",
+    "description": "Repeat a string a specified number of times.",
+    "parameters": {
+      "s": {"type": "string"},
+      "count": {"type": "number"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_string_length",
+    "description": "Return the number of characters in a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_count_character",
+    "description": "Count how many times a character appears in a string.",
+    "parameters": {
+      "s": {"type": "string"},
+      "character": {"type": "string"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_find_substring",
+    "description": "Find the position of a substring inside a string.",
+    "parameters": {
+      "source": {"type": "string"},
+      "substring": {"type": "string"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_replace_string",
+    "description": "Replace all occurrences of one string with another string.",
+    "parameters": {
+      "source": {"type": "string"},
+      "old": {"type": "string"},
+      "new": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_substitute_string_with_regex",
+    "description": "Replace all occurrences matching a regex pattern in a string.",
+    "parameters": {
+      "source_string": {"type": "string"},
+      "regex": {"type": "string"},
+      "replacement": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_extract_digits",
+    "description": "Extract all digit characters from a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_extract_numbers",
+    "description": "Extract numerical values represented inside a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_remove_spaces",
+    "description": "Remove all space characters from a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_remove_punctuation",
+    "description": "Remove punctuation characters from a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_starts_with",
+    "description": "Check whether a string starts with a specified prefix.",
+    "parameters": {
+      "s": {"type": "string"},
+      "prefix": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_ends_with",
+    "description": "Check whether a string ends with a specified suffix.",
+    "parameters": {
+      "s": {"type": "string"},
+      "suffix": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_first_character",
+    "description": "Return the first character of a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_last_character",
+    "description": "Return the last character of a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_substring",
+    "description": "Extract a portion of a string using start and end positions.",
+    "parameters": {
+      "s": {"type": "string"},
+      "start": {"type": "number"},
+      "end": {"type": "number"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_pad_string",
+    "description": "Add characters to a string until it reaches a specified length.",
+    "parameters": {
+      "s": {"type": "string"},
+      "length": {"type": "number"},
+      "character": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_convert_number_to_string",
+    "description": "Convert a number into its string representation.",
+    "parameters": {
+      "number": {"type": "number"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_convert_string_to_number",
+    "description": "Convert a numeric string into a number.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_round_number",
+    "description": "Round a number to a specified number of decimal places.",
+    "parameters": {
+      "number": {"type": "number"},
+      "decimals": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_sum",
+    "description": "Calculate the sum of two numerical values.",
+    "parameters": {
+      "first": {"type": "number"},
+      "second": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_difference",
+    "description": "Calculate the difference between two numerical values.",
+    "parameters": {
+      "first": {"type": "number"},
+      "second": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_product",
+    "description": "Calculate the product of two numerical values.",
+    "parameters": {
+      "first": {"type": "number"},
+      "second": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_ratio",
+    "description": "Calculate the ratio between two numerical values.",
+    "parameters": {
+      "numerator": {"type": "number"},
+      "denominator": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_percentage_change",
+    "description": "Calculate the percentage change between two values.",
+    "parameters": {
+      "old_value": {"type": "number"},
+      "new_value": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_clamp_number",
+    "description": "Limit a number between a minimum and maximum value.",
+    "parameters": {
+      "value": {"type": "number"},
+      "minimum": {"type": "number"},
+      "maximum": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_calculate_midpoint",
+    "description": "Calculate the midpoint between two numerical values.",
+    "parameters": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_format_greeting",
+    "description": "Create a personalized greeting using a name and message.",
+    "parameters": {
+      "name": {"type": "string"},
+      "message": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_join_with_separator",
+    "description": "Join two strings using a specified separator.",
+    "parameters": {
+      "first": {"type": "string"},
+      "second": {"type": "string"},
+      "separator": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_replace_first",
+    "description": "Replace the first occurrence of a substring in a string.",
+    "parameters": {
+      "source": {"type": "string"},
+      "old": {"type": "string"},
+      "new": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_reverse_words",
+    "description": "Reverse the order of words in a string.",
+    "parameters": {
+      "s": {"type": "string"}
+    },
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_current_time",
+    "description": "Return the current time as a formatted string.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_current_date",
+    "description": "Return the current date as a formatted string.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_random_number",
+    "description": "Generate and return a random number.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_random_string",
+    "description": "Generate and return a random string.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_pi",
+    "description": "Return the mathematical constant pi.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_euler_number",
+    "description": "Return the mathematical constant Euler's number.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_zero",
+    "description": "Return the numerical value zero.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_one",
+    "description": "Return the numerical value one.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_empty_string",
+    "description": "Return an empty string.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_application_name",
+    "description": "Return the name of the current application.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_version",
+    "description": "Return the current application version.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_hostname",
+    "description": "Return the hostname of the current machine.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_username",
+    "description": "Return the name of the current user.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_system_name",
+    "description": "Return the name of the current operating system.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  },
+  {
+    "name": "fn_get_random_decimal",
+    "description": "Generate and return a random decimal number.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_timestamp",
+    "description": "Return the current timestamp as a numerical value.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_unix_timestamp",
+    "description": "Return the current Unix timestamp.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_max_integer",
+    "description": "Return the maximum supported integer value.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_get_min_integer",
+    "description": "Return the minimum supported integer value.",
+    "parameters": null,
+    "returns": {"type": "number"}
+  },
+  {
+    "name": "fn_generate_identifier",
+    "description": "Generate and return a unique identifier string.",
+    "parameters": null,
+    "returns": {"type": "string"}
+  }
+]
