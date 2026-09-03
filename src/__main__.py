@@ -53,6 +53,7 @@ def call_me() -> None:
             with open(argument['input'], 'r') as f:
                 prompt_file = json.load(f)
         except OSError as e:
+            print("error on opening input file")
             print(e)
             sys.exit(-1)
 
@@ -65,6 +66,22 @@ def call_me() -> None:
             sys.exit(-1)
 
         for prompt in prompt_file:
+            if not isinstance(prompt, dict):
+                print("invalid entry must be a json with key \"prompt\"")
+                print(prompt)
+                continue
+
+            if 'prompt' not in prompt:
+                print("invalid entry must be a json with key \"prompt\"")
+                print(prompt)
+                continue
+
+            if not isinstance(prompt['prompt'], str):
+                print("invalid entry must be a json with key \"prompt\" \
+and anstr as value")
+                print(prompt)
+                continue
+
             try:
                 your_call = call_me_maybe(
                                 prompt['prompt'],
@@ -101,6 +118,7 @@ def call_me() -> None:
             print(e)
 
     except Exception as e:
+        print("another error unknow man")
         print(e)
         sys.exit(-1)
 
