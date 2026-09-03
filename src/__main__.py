@@ -33,7 +33,7 @@ def call_me() -> None:
                 validate_fuction_definition(function)
         except ValidationError:
             print("the following funtion definition is invalid")
-            print(function)
+            print(json.dumps(function, indent=2))
             sys.exit(-1)
 
         try:
