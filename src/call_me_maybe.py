@@ -22,7 +22,6 @@ def call_me_maybe(
             type_parameter: str,
             ) -> tuple[list[int], list[int]]:
 
-
         for _ in range(20):
             ids = model.get_logits_from_input_ids(token)
             next = ids.index(max(ids))
@@ -65,22 +64,21 @@ def call_me_maybe(
         constraint: list[int],
         tab_name_tokenised: list[list[int]],
     ) -> tuple[list[int], list[int]] | None:
-      for _ in range(20):
-        ids = model.get_logits_from_input_ids(token)
-        
-        _mask_token(ids, constraint)
+        for _ in range(20):
+            ids = model.get_logits_from_input_ids(token)
 
-        next = ids.index(max(ids))
+            _mask_token(ids, constraint)
 
-        if next == model.encode("\"")[0].tolist()[0]:
-          output_token.append(next)
-          token.append(next)
-          break
+            next = ids.index(max(ids))
 
-        output_token.append(next)
-        token.append(next)
-      return (token, output_token)
-            
+            if next == model.encode("\"")[0].tolist()[0]:
+                output_token.append(next)
+                token.append(next)
+                break
+
+            output_token.append(next)
+            token.append(next)
+        return (token, output_token)
 
     def _select_function(
             function_name: str,
@@ -111,16 +109,15 @@ def call_me_maybe(
         print(e)
         sys.exit(-1)
 
-
-    def set_prompt(msg, ft_list):
-        exemple = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
+    def set_prompt(msg: str, ft_list: list[int]) -> Any:
+        ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
         prompt = f"""
         Select the appropriate function from the available functions
         and extract its arguments from the user's request.
         Available functions: {ft_list}
         Example:
         User request: 'what's the sum of 2,0 and 3,5'
-        Output: {exemple}
+        Output: {ex}
         User request: {msg}
         Output:"""
 
@@ -136,15 +133,13 @@ def call_me_maybe(
     token = set_prompt(msg, ft_list)
 
     _put_value(output_token, token, '{"name": "')
- 
- 
+
     name_found = _search_name(
         token,
         output_token,
         name,
         table_name_tokenised
         )
-
 
     if not name_found:
         print("error on name research")
