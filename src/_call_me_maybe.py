@@ -1,7 +1,4 @@
-"""docstring."""
-
-
-from .validation_model import MyFuctionDefinition
+from ._validation_model import MyFuctionDefinition
 from typing import Any
 from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 from pydantic import ValidationError
@@ -15,7 +12,18 @@ def call_me_maybe(
         functions_definition: Any,
         model: Small_LLM_Model
 ) -> Any:
+    """Control interface that orchestrates the LLM parameters and execution.
 
+    Args:
+        msg: User prompt to process.
+        functions_definition: Function definitions loaded from the JSON file.
+        model: Utility class wrapping a lightweight Hugging Face causal
+            language
+            model for fast, low-memory experimentation.
+
+    Returns:
+        A dictionary containing the selected function name and its parameters.
+    """
     def _search_variable(
             token: list[int],
             output_token: list[int],

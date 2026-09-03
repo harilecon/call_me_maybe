@@ -3,6 +3,16 @@ import argparse
 
 
 class ParseResult(TypedDict):
+    """Result of parsing the command-line arguments.
+
+    Attributes:
+        functions_definition: Path to the JSON file containing the function
+            definitions.
+        input: Path to the input file.
+        output: Path to the output file.
+        llm: Name or path of the LLM model to use.
+    """
+
     functions_definition: str
     input: str
     output: str
@@ -10,6 +20,11 @@ class ParseResult(TypedDict):
 
 
 def parse_input() -> ParseResult:
+    """Parse command-line arguments using argparse.
+
+    Returns:
+        ParseResult: A dictionary containing the parsed command-line arguments.
+    """
     parse = argparse.ArgumentParser()
 
     parse.add_argument(
