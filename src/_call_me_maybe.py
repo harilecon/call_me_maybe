@@ -118,6 +118,7 @@ def call_me_maybe(
         sys.exit(-1)
 
     def set_prompt(msg: str, ft_list: list[int]) -> Any:
+
         ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
         prompt = f"""
         Select the appropriate function from the available functions
@@ -157,14 +158,10 @@ def call_me_maybe(
 
     function_name = model.decode(output_token).split("\"")[3]
 
-    # print(function_name)
     for i in ft_list:
         if i['name'] == function_name:
             new_list = [i]
             break
-
-    token = set_prompt(msg, new_list)
-    token += output_token
 
     function_selected = _select_function(
         function_name,
