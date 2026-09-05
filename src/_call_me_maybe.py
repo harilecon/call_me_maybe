@@ -5,6 +5,7 @@ from pydantic import ValidationError
 import sys
 import json
 import math
+import ast
 
 
 def call_me_maybe(
@@ -32,6 +33,7 @@ def call_me_maybe(
 
         for _ in range(20):
             ids = model.get_logits_from_input_ids(token)
+
             next = ids.index(max(ids))
 
             if next == model.encode(",")[0].tolist()[0]:
@@ -43,15 +45,22 @@ def call_me_maybe(
                 token.append(next)
                 return (token, output_token)
 
+            elif next == model.encode(")\",")[0].tolist()[0]:
+                next = model.encode(")\"")[0].tolist()[0]
+                output_token.append(next)
+                token.append(next)
+                return (token, output_token)
+
             output_token.append(next)
             token.append(next)
 
             try:
                 x = model.decode(output_token)
-                json.loads(x)
+                x = ast.literal_eval(x)
+                json.dumps(x)
                 return (token, output_token)
 
-            except Exception:
+            except SyntaxError:
                 ...
 
         if type_parameter == 'string':
@@ -73,6 +82,7 @@ def call_me_maybe(
         tab_name_tokenised: list[list[int]],
     ) -> tuple[list[int], list[int]] | None:
         for _ in range(20):
+
             ids = model.get_logits_from_input_ids(token)
 
             _mask_token(ids, constraint)
@@ -160,7 +170,6 @@ def call_me_maybe(
 
     for i in ft_list:
         if i['name'] == function_name:
-            new_list = [i]
             break
 
     function_selected = _select_function(
@@ -191,7 +200,9 @@ def call_me_maybe(
             )
 
         try:
-            return json.loads(model.decode(output_token))
+            txt = ast.literal_eval(str(model.decode(output_token)))
+            return json.loads(json.dumps(txt))
+
         except Exception:
             ...
 
@@ -204,8 +215,9 @@ def call_me_maybe(
             token += y
             output_token += y
             try:
-                return json.loads(model.decode(output_token))
+                txt = ast.literal_eval(model.decode(output_token))
+                return json.loads(txt)
             except Exception:
                 ...
 
-    return model.decode(output_token)
+    return json.loads(model.decode(output_token))
