@@ -35,7 +35,7 @@ For this project, we use **Qwen/Qwen3-0.6B**, a lightweight language model, as t
 
 ## Instructions
 
-## Prerequisites
+### Prerequisites
 * <b>python3</b>
 
 * `uv`

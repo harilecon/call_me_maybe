@@ -1,0 +1,1 @@
+{"name": "fn_substitute_string_with_regex", "parameters": {"source_string": "programming", "regex": "(\w+)", "replacement": ""}}

@@ -1,0 +1,435 @@
+[
+  {
+    "prompt": "What is the sum of 2 and 3?",
+    "name": "fn_add_numbers",
+    "parameters": {
+      "a": 2,
+      "b": 3
+    }
+  },
+  {
+    "prompt": "Add 15 and 27 together.",
+    "name": "fn_add_numbers",
+    "parameters": {
+      "a": 15,
+      "b": 27
+    }
+  },
+  {
+    "prompt": "Calculate 100 minus 45.",
+    "name": "fn_subtract_numbers",
+    "parameters": {
+      "a": 100,
+      "b": 45
+    }
+  },
+  {
+    "prompt": "What is the difference between 72 and 18?",
+    "name": "fn_subtract_numbers",
+    "parameters": {
+      "a": 72,
+      "b": 18
+    }
+  },
+  {
+    "prompt": "Multiply 6 by 8.",
+    "name": "fn_multiply_numbers",
+    "parameters": {
+      "a": 6,
+      "b": 8
+    }
+  },
+  {
+    "prompt": "What is 12 times 7?",
+    "name": "fn_multiply_numbers",
+    "parameters": {
+      "a": 12,
+      "b": 7
+    }
+  },
+  {
+    "prompt": "Divide 100 by 4.",
+    "name": "fn_divide_numbers",
+    "parameters": {
+      "a": 100,
+      "b": 4
+    }
+  },
+  {
+    "prompt": "What is 81 divided by 9?",
+    "name": "fn_divide_numbers",
+    "parameters": {
+      "a": 81,
+      "b": 9
+    }
+  },
+  {
+    "prompt": "What is the square of 12?",
+    "name": "fn_get_square",
+    "parameters": {
+      "a": 12
+    }
+  },
+  {
+    "prompt": "Calculate 15 squared.",
+    "name": "fn_get_square",
+    "parameters": {
+      "a": 15
+    }
+  },
+  {
+    "prompt": "What is the cube of 4?",
+    "name": "fn_get_cube",
+    "parameters": {
+      "a": 4
+    }
+  },
+  {
+    "prompt": "Calculate 5 to the power of 3.",
+    "name": "fn_calculate_power",
+    "parameters": {
+      "base": 5,
+      "exponent": 3
+    }
+  },
+  {
+    "prompt": "What is the absolute value of -42?",
+    "name": "fn_get_absolute",
+    "parameters": {
+      "a": -42
+    }
+  },
+  {
+    "prompt": "Return the absolute value of -17.5.",
+    "name": "fn_get_absolute",
+    "parameters": {
+      "a": -17.5
+    }
+  },
+  {
+    "prompt": "Which is larger, 45 or 72?",
+    "name": "fn_get_maximum",
+    "parameters": {
+      "a": 45,
+      "b": 72
+    }
+  },
+  {
+    "prompt": "What is the maximum of 12 and 9?",
+    "name": "fn_get_maximum",
+    "parameters": {
+      "a": 12,
+      "b": 9
+    }
+  },
+  {
+    "prompt": "Which is smaller, 18 or 31?",
+    "name": "fn_get_minimum",
+    "parameters": {
+      "a": 18,
+      "b": 31
+    }
+  },
+  {
+    "prompt": "What is the minimum of 4 and 11?",
+    "name": "fn_get_minimum",
+    "parameters": {
+      "a": 4,
+      "b": 11
+    }
+  },
+  {
+    "prompt": "Calculate the average of 10 and 20.",
+    "name": "fn_calculate_average",
+    "parameters": {
+      "a": 10,
+      "b": 20
+    }
+  },
+  {
+    "prompt": "What is the average of 75 and 25?",
+    "name": "fn_calculate_average",
+    "parameters": {
+      "a": 75,
+      "b": 25
+    }
+  },
+  {
+    "prompt": "Calculate the square root of 144.",
+    "name": "fn_get_square_root",
+    "parameters": {
+      "a": 144
+    }
+  },
+  {
+    "prompt": "What is the square root of 81?",
+    "name": "fn_get_square_root",
+    "parameters": {
+      "a": 81
+    }
+  },
+  {
+    "prompt": "Add 4, 5, and 6 together.",
+    "name": "fn_add_three_numbers",
+    "parameters": {
+      "a": 4.0,
+      "b": 5.0,
+      "c": 6.0
+    }
+  },
+  {
+    "prompt": "What is the sum of 10, 20, and 30?",
+    "name": "fn_add_three_numbers",
+    "parameters": {
+      "a": 10.0,
+      "b": 20.0,
+      "c": 30.0
+    }
+  },
+  {
+    "prompt": "Multiply 2, 3, and 4 together.",
+    "name": "fn_multiply_numbers",
+    "parameters": {
+      "a": 2.0,
+      "b": 3.0
+    }
+  },
+  {
+    "prompt": "What is 5 times 6 times 2?",
+    "name": "fn_multiply_numbers",
+    "parameters": {
+      "a": 5,
+      "b": 6
+    }
+  },
+  {
+    "prompt": "What is 20 percent of 150?",
+    "name": "fn_get_percentage",
+    "parameters": {
+      "value": 150,
+      "percentage": 20
+    }
+  },
+  {
+    "prompt": "Calculate 15 percent of 200.",
+    "name": "fn_get_percentage",
+    "parameters": {
+      "value": 200,
+      "percentage": 15
+    }
+  },
+  {
+    "prompt": "Raise 2 to the power of 10.",
+    "name": "fn_calculate_power",
+    "parameters": {
+      "base": 2,
+      "exponent": 10
+    }
+  },
+  {
+    "prompt": "Calculate 3 to the power of 4.",
+    "name": "fn_calculate_power",
+    "parameters": {
+      "base": 3,
+      "exponent": 4
+    }
+  },
+  {
+    "prompt": "Convert 0 degrees Celsius to Fahrenheit.",
+    "name": "fn_convert_celsius_to_fahrenheit",
+    "parameters": {
+      "celsius": 0
+    }
+  },
+  {
+    "prompt": "Convert 100 degrees Celsius to Fahrenheit.",
+    "name": "fn_convert_celsius_to_fahrenheit",
+    "parameters": {
+      "celsius": 100
+    }
+  },
+  {
+    "prompt": "Convert 32 degrees Fahrenheit to Celsius.",
+    "name": "fn_convert_fahrenheit_to_celsius",
+    "parameters": {
+      "fahrenheit": 32
+    }
+  },
+  {
+    "prompt": "Convert 212 degrees Fahrenheit to Celsius.",
+    "name": "fn_convert_fahrenheit_to_celsius",
+    "parameters": {
+      "fahrenheit": 212
+    }
+  },
+  {
+    "prompt": "What is the distance between 10 and 25?",
+    "name": "fn_calculate_distance",
+    "parameters": {
+      "x1": 10,
+      "x2": 25
+    }
+  },
+  {
+    "prompt": "Calculate the distance between -5 and 12.",
+    "name": "fn_calculate_distance",
+    "parameters": {
+      "x1": -5,
+      "x2": 12
+    }
+  },
+  {
+    "prompt": "Hello John.",
+    "name": "fn_greet",
+    "parameters": {
+      "name": "John"
+    }
+  },
+  {
+    "prompt": "Give me a greeting for Alice.",
+    "name": "fn_greet",
+    "parameters": {
+      "name": "Alice"
+    }
+  },
+  {
+    "prompt": "Say hello to Michael.",
+    "name": "fn_greet",
+    "parameters": {
+      "name": "Michael"
+    }
+  },
+  {
+    "prompt": "Create a greeting for Sarah.",
+    "name": "fn_greet",
+    "parameters": {
+      "name": "Sarah"
+    }
+  },
+  {
+    "prompt": "Reverse the string hello.",
+    "name": "fn_reverse_string",
+    "parameters": {
+      "s": "olleh"
+    }
+  },
+  {
+    "prompt": "Reverse the word computer.",
+    "name": "fn_reverse_string",
+    "parameters": {
+      "s": "computer"
+    }
+  },
+  {
+    "prompt": "Convert hello world to uppercase.",
+    "name": "fn_to_uppercase",
+    "parameters": {
+      "s": "HELLO WORLD"
+    }
+  },
+  {
+    "prompt": "Make the string Python lowercase.",
+    "name": "fn_to_lowercase",
+    "parameters": {
+      "s": "python"
+    }
+  },
+  {
+    "prompt": "Convert HELLO WORLD to lowercase.",
+    "name": "fn_to_lowercase",
+    "parameters": {
+      "s": "hello world"
+    }
+  },
+  {
+    "prompt": "Convert good morning to uppercase.",
+    "name": "fn_to_uppercase",
+    "parameters": {
+      "s": "GOOD MORNING"
+    }
+  },
+  {
+    "prompt": "Remove the spaces around the string hello.",
+    "name": "fn_remove_spaces",
+    "parameters": {
+      "s": "hello"
+    }
+  },
+  {
+    "prompt": "Trim whitespace from the string test.",
+    "name": "fn_trim_string",
+    "parameters": {
+      "s": "test"
+    }
+  },
+  {
+    "prompt": "Concatenate hello and world.",
+    "name": "fn_concatenate_strings",
+    "parameters": {
+      "a": "hello",
+      "b": "world"
+    }
+  },
+  {
+    "prompt": "Join the strings good and morning.",
+    "name": "fn_concatenate_strings",
+    "parameters": {
+      "a": "good",
+      "b": "morning"
+    }
+  },
+  {
+    "prompt": "Repeat the string ha three times.",
+    "name": "fn_repeat_string",
+    "parameters": {
+      "s": "ha",
+      "count": 3
+    }
+  },
+  {
+    "prompt": "Repeat the word test five times.",
+    "name": "fn_repeat_string",
+    "parameters": {
+      "s": "test",
+      "count": 5
+    }
+  },
+  {
+    "prompt": "How many characters are in hello?",
+    "name": "fn_get_string_length",
+    "parameters": {
+      "s": "hello"
+    }
+  },
+  {
+    "prompt": "What is the length of the string programming?",
+    "name": "fn_get_string_length",
+    "parameters": {
+      "s": "programming"
+    }
+  },
+  {
+    "prompt": "How many times does the letter a appear in banana?",
+    "name": "fn_count_character",
+    "parameters": {
+      "s": "banana",
+      "character": "a"
+    }
+  },
+  {
+    "prompt": "Count the letter l in hello world.",
+    "name": "fn_count_character",
+    "parameters": {
+      "s": "hello world",
+      "character": "l"
+    }
+  },
+  {
+    "prompt": "Find the position of world in hello world.",
+    "name": "fn_find_substring",
+    "parameters": {
+      "source": "hello",
+      "substring": "world"
+    }
+  }
+]

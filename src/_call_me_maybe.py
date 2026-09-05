@@ -6,6 +6,7 @@ import sys
 import json
 import math
 import ast
+import re
 
 
 def call_me_maybe(
@@ -35,6 +36,10 @@ def call_me_maybe(
             ids = model.get_logits_from_input_ids(token)
 
             next = ids.index(max(ids))
+            if type_parameter in ['number']:
+                path = model.get_path_to_vocab_file()
+                with open(path, "r") as f:
+                    ft = json.load(f)
 
             if next == model.encode(",")[0].tolist()[0]:
                 break
@@ -64,6 +69,7 @@ def call_me_maybe(
                 ...
 
         if type_parameter == 'string':
+
             next = model.encode("\"")[0].tolist()[0]
             output_token.append(next)
             token.append(next)
@@ -194,12 +200,11 @@ def call_me_maybe(
     _put_value(output_token, token, ', "parameters": {')
 
     for i in range(len(type_parameter)):
-
-        _put_value(output_token, token, f'"{type_parameter[i]}":')
+        
         token, output_token = _search_variable(
             token,
             output_token,
-            parameter[type_parameter[0]]['type']
+            parameter[type_parameter[i]]['type']
             )
 
         try:

@@ -36,7 +36,7 @@ def call_me() -> None:
     Returns:
         None.
     """
-    # try:
+
     argument = parse_input()
     try:
         with open(argument['functions_definition'], 'r') as f:
@@ -60,67 +60,69 @@ def call_me() -> None:
     final = []
     try:
         model = Small_LLM_Model(model_name=argument['llm'])
+
     except Exception as e:
         print("error wit the module llm_Sdk")
         print(e)
         sys.exit(-1)
 
-    for prompt in prompt_file:
-        if not isinstance(prompt, dict):
-            print("invalid entry must be a json with key \"prompt\"")
-            print(prompt)
-            continue
-
-        if 'prompt' not in prompt:
-            print("invalid entry must be a json with key \"prompt\"")
-            print(prompt)
-            continue
-
-        if not isinstance(prompt['prompt'], str):
-            print("invalid entry must be a json with key \"prompt\" \
-and anstr as value")
-            print(prompt)
-            continue
-
-        try:
-            your_call = call_me_maybe(
-                            prompt['prompt'],
-                            functions_definition,
-                            model
-                            )
-
-            if not your_call:
-                print("error with this call")
-                print(prompt)
-                continue
-
-            prompt.update(your_call)
-            validate = MyFunctionCall(**prompt)
-        except ValidationError as e:
-            print("error on validation of the returned function call")
-            print(f"prompt = \"{prompt}\"")
-            print("got from the llm:")
-            print(prompt)
-            print(e)
-        prompt.update(validate)
-        final.append(prompt)
-        print(json.dumps(prompt, indent=2))
+        # a need to be clear
+    default = "data/output/function_calling_results.json"
+    if default == argument['output']:
+        if not os.path.exists("data/output"):
+            os.mkdir("data/output")
 
     try:
-        default = "data/output/function_calling_results.json"
-        if default == argument['output']:
-            if not os.path.exists("data/output"):
-                os.mkdir("data/output")
-
         with open(argument['output'], 'w') as file:
-            json.dump(final, file, indent=2)
+
+            for prompt in prompt_file:
+                if not isinstance(prompt, dict):
+                    print("invalid entry must be a json with key \"prompt\"")
+                    print(prompt)
+                    continue
+
+                if 'prompt' not in prompt:
+                    print("invalid entry must be a json with key \"prompt\"")
+                    print(prompt)
+                    continue
+
+                if not isinstance(prompt['prompt'], str):
+                    print("invalid entry must be a json with key \"prompt\" \
+        and anstr as value")
+                    print(prompt)
+                    continue
+
+                try:
+                    your_call = call_me_maybe(
+                                    prompt['prompt'],
+                                    functions_definition,
+                                    model
+                                    )
+
+                    if not your_call:
+                        print("error with this call")
+                        print(prompt)
+                        continue
+
+                    prompt.update(your_call)
+                    validate = MyFunctionCall(**prompt)
+                except ValidationError as e:
+                    print("error on validation of the returned function call")
+                    print(f"prompt = \"{prompt}\"")
+                    print("got from the llm:")
+                    print(prompt)
+                    print(e)
+                prompt.update(validate)
+                final.append(prompt)
+                print(json.dumps(prompt, indent=2))
+                json.dump(final, file, indent=2)
+
     except OSError as e:
         print(e)
 
-    # except Exception as e:
-    #     print("another error unknow man")
-    #     print(e)
-    #     sys.exit(-1)
+
+
+
 
 
 if __name__ == '__main__':
