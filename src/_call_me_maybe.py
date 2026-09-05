@@ -177,8 +177,11 @@ def call_me_maybe(
         ft_list
         )
     if not function_selected:
-        print("no function selected")
-        return None
+        return {
+            "name": "_ERROR",
+            "parameters": None,
+            "comment": "no function selected"
+            }
 
     parameter = function_selected['parameters']
 
