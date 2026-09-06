@@ -196,10 +196,11 @@ def call_me_maybe(
         return json.loads(model.decode(output_token))
 
     type_parameter = [i for i in parameter]
-
     _put_value(output_token, token, ', "parameters": {')
 
     for i in range(len(type_parameter)):
+        # harimino 
+        _put_value(output_token, token, f'"{type_parameter[i]}":')
         
         token, output_token = _search_variable(
             token,

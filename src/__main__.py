@@ -72,53 +72,53 @@ def call_me() -> None:
         if not os.path.exists("data/output"):
             os.mkdir("data/output")
 
-    try:
-        with open(argument['output'], 'w') as file:
 
-            for prompt in prompt_file:
-                if not isinstance(prompt, dict):
-                    print("invalid entry must be a json with key \"prompt\"")
-                    print(prompt)
-                    continue
+    for prompt in prompt_file:
+        if not isinstance(prompt, dict):
+            print("invalid entry must be a json with key \"prompt\"")
+            print(prompt)
+            continue
 
-                if 'prompt' not in prompt:
-                    print("invalid entry must be a json with key \"prompt\"")
-                    print(prompt)
-                    continue
+        if 'prompt' not in prompt:
+            print("invalid entry must be a json with key \"prompt\"")
+            print(prompt)
+            continue
 
-                if not isinstance(prompt['prompt'], str):
-                    print("invalid entry must be a json with key \"prompt\" \
-        and anstr as value")
-                    print(prompt)
-                    continue
+        if not isinstance(prompt['prompt'], str):
+            print("invalid entry must be a json with key \"prompt\" \
+and anstr as value")
+            print(prompt)
+            continue
 
-                try:
-                    your_call = call_me_maybe(
-                                    prompt['prompt'],
-                                    functions_definition,
-                                    model
-                                    )
+        try:
+            your_call = call_me_maybe(
+                            prompt['prompt'],
+                            functions_definition,
+                            model
+                            )
 
-                    if not your_call:
-                        print("error with this call")
-                        print(prompt)
-                        continue
+            if not your_call:
+                print("error with this call")
+                print(prompt)
+                continue
 
-                    prompt.update(your_call)
-                    validate = MyFunctionCall(**prompt)
-                except ValidationError as e:
-                    print("error on validation of the returned function call")
-                    print(f"prompt = \"{prompt}\"")
-                    print("got from the llm:")
-                    print(prompt)
-                    print(e)
-                prompt.update(validate)
-                final.append(prompt)
+            prompt.update(your_call)
+            validate = MyFunctionCall(**prompt)
+        except ValidationError as e:
+            print("error on validation of the returned function call")
+            print(f"prompt = \"{prompt}\"")
+            print("got from the llm:")
+            print(prompt)
+            print(e)
+        prompt.update(validate)
+        final.append(prompt)
+        try:
+            with open(argument['output'], 'w') as file:
                 print(json.dumps(prompt, indent=2))
                 json.dump(final, file, indent=2)
 
-    except OSError as e:
-        print(e)
+        except OSError as e:
+            print(e)
 
 
 
