@@ -154,6 +154,14 @@ The LLM only needs to generate the function name and choose the appropriate para
 
 ### Performance analysis
 
+Using the prompt to inject the function definitions consumed a significant amount of resources during next-token generation.
+
+I also tried modifying the prompt dynamically once the function name had been identified. However, the LLM immediately started hallucinating instead of continuing with the expected parameter generation.
+
+On a test set of 106 prompts, the LLM correctly identified the function in 104 cases, with 2 errors. The function-selection accuracy was therefore approximately 98.1%.
+
+These results show that the approach is relatively reliable for function selection, but injecting all function definitions into the prompt remains expensive in terms of token generation and computation.
+
 ### Challenges faced
 One of the main challenges was the time constraint. I needed to complete the test and meet the required execution time without using a KV cache. This required optimizing the constrained decoding process to reduce unnecessary computations.
 
@@ -183,6 +191,9 @@ graph TD
     F --> G[Validated Function Call]
 ```
 ### Example usage
+```shell
+$ uv run --python 3.12.5 python -m src -input my_test_call.json -output drive/MyDrive/final.json -functions_definition my_function_definition.json -llm Qwen/Qwen3-0.6B
+```
 
 
 #### Tested on :
