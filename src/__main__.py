@@ -72,7 +72,6 @@ def call_me() -> None:
         if not os.path.exists("data/output"):
             os.mkdir("data/output")
 
-
     for prompt in prompt_file:
         if not isinstance(prompt, dict):
             print("invalid entry must be a json with key \"prompt\"")
@@ -119,10 +118,6 @@ and anstr as value")
 
         except OSError as e:
             print(e)
-
-
-
-
 
 
 if __name__ == '__main__':
