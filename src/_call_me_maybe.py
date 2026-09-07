@@ -229,5 +229,11 @@ def call_me_maybe(
                 return json.loads(txt)
             except Exception:
                 ...
-
-    return json.loads(model.decode(output_token))
+    try:
+        return json.loads(model.decode(output_token))
+    except Exception as e:
+        return {
+         "name": "_ERROR",
+         "parameters": None,
+         "comment": f"{e}"
+        }

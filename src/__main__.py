@@ -46,6 +46,11 @@ def call_me() -> None:
         for function in functions_definition:
             _validate_fuction_definition(function)
 
+    except json.decoder.JSONDecodeError as e:
+        print("invalid json on input")
+        print(e)
+        sys.exit(-1)
+
     except OSError as e:
         print("error on opening definition file")
         print(e)
