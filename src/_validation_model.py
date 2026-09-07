@@ -7,8 +7,11 @@ class AllowedValue(Enum):
     """Define the allowed values for function parameters."""
 
     NUMBER = 'number'
+    INTEGER = 'integer'
     NULL = None
     STRING = 'string'
+    BOOLEAN = 'boolean'
+    ARRAY = 'array'
 
 
 class MyFuctionDefinition(BaseModel):

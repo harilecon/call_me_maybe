@@ -32,12 +32,18 @@ def call_me_maybe(
             ) -> tuple[list[int], list[int]]:
 
         for _ in range(20):
+
             ids = model.get_logits_from_input_ids(token)
 
             next = ids.index(max(ids))
 
-            if next == model.encode(",")[0].tolist()[0]:
-                break
+            if type_parameter == 'number' or type_parameter == 'integer':
+                if type_parameter == 'integer':
+                    if next == model.encode(".")[0].tolist()[0]:
+                        break
+
+                if next == model.encode(",")[0].tolist()[0]:
+                    break
 
             elif next == model.encode("\",")[0].tolist()[0]:
                 next = model.encode("\"")[0].tolist()[0]
@@ -56,7 +62,8 @@ def call_me_maybe(
 
             try:
                 x = model.decode(output_token)
-                x = ast.literal_eval(x)
+                if type_parameter != 'boolean':
+                    x = ast.literal_eval(x)
                 json.dumps(x)
                 return (token, output_token)
 

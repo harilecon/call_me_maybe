@@ -23,8 +23,9 @@ def _validate_fuction_definition(parameter: dict[str, Any]) -> None:
         for value in first_validation['parameters']:
             ValidateParameter(**first_validation['parameters'][value])
 
-        for value in first_validation['returns']:
-            ValidateParameter(**first_validation['returns'])
+        if first_validation['returns']:
+            for value in first_validation['returns']:
+                ValidateParameter(**first_validation['returns'])
 
 
 def call_me() -> None:
@@ -44,6 +45,12 @@ def call_me() -> None:
 
         for function in functions_definition:
             _validate_fuction_definition(function)
+
+    except OSError as e:
+        print("error on opening definition file")
+        print(e)
+        sys.exit(-1)
+
     except ValidationError:
         print("the following funtion definition is invalid")
         print(json.dumps(function, indent=2))
