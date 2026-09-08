@@ -35,6 +35,12 @@ For this project, we use **Qwen/Qwen3-0.6B**, a lightweight language model, as t
 
 ## Instructions
 
+```shell
+mkdir ~/goinfre/huggingface ~/goinfre/uv_cache
+export HF_HOME=~/goinfre/huggingface
+export UV_CACHE_DIR=~/goinfre/uv_cache
+```
+
 ### Prerequisites
 * <b>python3</b>
 
@@ -192,7 +198,7 @@ graph TD
 ```
 ### Example usage
 ```shell
-$ uv run --python 3.12.5 python -m src -input my_test_call.json -output drive/MyDrive/final.json -functions_definition my_function_definition.json -llm Qwen/Qwen3-0.6B
+$ uv run --python 3.12.5 python -m src --input my_test_call.json --output drive/MyDrive/final.json --functions_definition my_function_definition.json --llm Qwen/Qwen3-0.6B
 ```
 
 

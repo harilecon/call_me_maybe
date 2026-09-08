@@ -59,26 +59,32 @@ class MyFunctionCall(BaseModel):
 
 
 class Number(BaseModel):
+    """Define the allowed values for type number."""
     value: Annotated[float, Field(...)]
 
 
 class Integer(BaseModel):
+    """Define the allowed values for type integer."""
     value: Annotated[int, Field(...)]
 
 
 class Boolean(BaseModel):
+    """Define the allowed values for type boolean."""
     value: Annotated[bool, Field(...)]
 
 
 class Array(BaseModel):
+    """Define the allowed values for type array."""
     value: Annotated[list[Any], Field(...)]
 
 
 class String(BaseModel):
+    """Define the allowed values for type string."""
     value: Annotated[str, Field(...)]
 
 
 class Null(BaseModel):
+    """Define the allowed values for type null."""
     value: Annotated[None, Field(...)]
 
 
