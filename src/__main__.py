@@ -37,13 +37,21 @@ def call_me() -> None:
     Returns:
         None.
     """
-
     argument = parse_input()
+    functions_definition: list[dict[str, Any]] | None = None
     try:
         with open(argument['functions_definition'], 'r') as f:
             functions_definition = json.load(f)
 
+        if not isinstance(functions_definition, list):
+            raise ValueError("the function definition file must \
+contain a list of functions")
+
         for function in functions_definition:
+            if not isinstance(function, dict):
+                raise TypeError("each function definition \
+must be a JSON object")
+
             _validate_fuction_definition(function)
 
     except json.decoder.JSONDecodeError as e:
@@ -56,14 +64,28 @@ def call_me() -> None:
         print(e)
         sys.exit(-1)
 
-    except ValidationError:
-        print("the following funtion definition is invalid")
-        print(json.dumps(function, indent=2))
+    except (TypeError, ValueError) as e:
+        print("the function definition payload is invalid")
+        print(e)
+        sys.exit(-1)
+
+    except ValidationError as e:
+        print("the following function definition is invalid")
+        if isinstance(function, dict):
+            print(json.dumps(function, indent=2))
+        else:
+            print(function)
+        print(e)
         sys.exit(-1)
 
     try:
         with open(argument['input'], 'r') as f:
             prompt_file = json.load(f)
+
+            if not isinstance(prompt_file, list):
+                raise ValueError("the prompt file must \
+contain a list of prompt objects")
+
     except json.decoder.JSONDecodeError as e:
         print("json invalid for the prompt")
         print(e)
@@ -74,7 +96,13 @@ def call_me() -> None:
         print(e)
         sys.exit(-1)
 
+    except ValueError as e:
+        print("invalid prompt content")
+        print(e)
+        sys.exit(-1)
+
     final = []
+
     try:
         model = Small_LLM_Model(model_name=argument['llm'])
 
