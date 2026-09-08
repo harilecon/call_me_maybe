@@ -36,9 +36,10 @@ For this project, we use **Qwen/Qwen3-0.6B**, a lightweight language model, as t
 ## Instructions
 
 ```shell
-mkdir ~/goinfre/huggingface ~/goinfre/uv_cache
+mkdir ~/goinfre/huggingface ~/goinfre/uv_cache ~/goinfre/uv_venv
 export HF_HOME=~/goinfre/huggingface
 export UV_CACHE_DIR=~/goinfre/uv_cache
+export UV_PROJECT_ENVIRONMENT=~/goinfre/uv_venv
 ```
 
 ### Prerequisites
