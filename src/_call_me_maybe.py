@@ -1,4 +1,4 @@
-from ._validation_model import MyFuctionDefinition
+from ._validation_model import MyFuctionDefinition, validator_value
 from typing import Any
 from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 from pydantic import ValidationError
@@ -184,11 +184,13 @@ def call_me_maybe(
         function_name,
         ft_list
         )
+
     if not function_selected:
         return {
-            "name": "_ERROR",
-            "parameters": None,
+         "name": "_ERROR",
+         "parameters": {
             "comment": "no function selected"
+                }
             }
 
     parameter = function_selected['parameters']
@@ -211,29 +213,55 @@ def call_me_maybe(
 
         try:
             txt = ast.literal_eval(str(model.decode(output_token)))
-            return json.loads(json.dumps(txt))
+            output_final = json.loads(json.dumps(txt))
+
+            k = function_selected['parameters']
+
+            for i in k:
+                try:
+                    x = {'value': output_final["parameters"][i]}
+
+                    validator_value[k[i]['type']].model_validate(x)
+                except ValidationError as e:
+                    return {
+                        "name": "_ERROR",
+                        "parameters": {
+                            "comment": f"{e}"
+                                }
+                        }
+
+            return output_final
 
         except Exception:
             ...
+        try:
+            if i < len(type_parameter) - 1:
+                y = model.encode(', ')[0].tolist()
+                token += y
+                output_token += y
+            else:
+                y = model.encode('}}')[0].tolist()
+                token += y
+                output_token += y
+                try:
+                    txt = ast.literal_eval(model.decode(output_token))
+                    return json.loads(txt)
+                except Exception:
+                    ...
 
-        if i < len(type_parameter) - 1:
-            y = model.encode(', ')[0].tolist()
-            token += y
-            output_token += y
-        else:
-            y = model.encode('}}')[0].tolist()
-            token += y
-            output_token += y
-            try:
-                txt = ast.literal_eval(model.decode(output_token))
-                return json.loads(txt)
-            except Exception:
-                ...
+        except TypeError as e:
+            return {
+                "name": "_ERROR",
+                "parameters": {
+                    "comment": f"{e}"
+                    }
+                }
     try:
         return json.loads(model.decode(output_token))
     except Exception as e:
         return {
          "name": "_ERROR",
-         "parameters": None,
-         "comment": f"{e}"
+         "parameters": {
+            "comment": f"{e}"
+            }
         }

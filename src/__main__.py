@@ -47,7 +47,7 @@ def call_me() -> None:
             _validate_fuction_definition(function)
 
     except json.decoder.JSONDecodeError as e:
-        print("invalid json on input")
+        print("json invalid the function definition")
         print(e)
         sys.exit(-1)
 
@@ -64,6 +64,11 @@ def call_me() -> None:
     try:
         with open(argument['input'], 'r') as f:
             prompt_file = json.load(f)
+    except json.decoder.JSONDecodeError as e:
+        print("json invalid for the prompt")
+        print(e)
+        sys.exit(-1)
+
     except OSError as e:
         print("error on opening input file")
         print(e)
@@ -78,7 +83,6 @@ def call_me() -> None:
         print(e)
         sys.exit(-1)
 
-        # a need to be clear
     default = "data/output/function_calling_results.json"
     if default == argument['output']:
         if not os.path.exists("data/output"):
@@ -109,9 +113,12 @@ and anstr as value")
                             )
 
             if not your_call:
-                print("error with this call")
-                print(prompt)
-                continue
+                your_call = {
+                    "name": "_ERROR",
+                    "parameters": {
+                        "comment": "error with this call no function selected"
+                            }
+                    }
 
             prompt.update(your_call)
             validate = MyFunctionCall(**prompt)

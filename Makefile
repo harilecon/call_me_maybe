@@ -12,7 +12,7 @@ install:
 
 
 debug:
-	$(PYTHON) -m pdb src/__main__.py
+	$(PYTHON) -m pdb src
 
 clean:
 	find . -type d -name "__pycache__" -prune -exec rm -rf {} \;

@@ -56,3 +56,37 @@ class MyFunctionCall(BaseModel):
     prompt: Annotated[str, Field(...)]
     name: Annotated[str, Field(...)]
     parameters: Annotated[dict[str, Any] | None, Field(...)]
+
+
+class Number(BaseModel):
+    value: Annotated[float, Field(...)]
+
+
+class Integer(BaseModel):
+    value: Annotated[int, Field(...)]
+
+
+class Boolean(BaseModel):
+    value: Annotated[bool, Field(...)]
+
+
+class Array(BaseModel):
+    value: Annotated[list[Any], Field(...)]
+
+
+class String(BaseModel):
+    value: Annotated[str, Field(...)]
+
+
+class Null(BaseModel):
+    value: Annotated[None, Field(...)]
+
+
+validator_value = {
+    'number': Number,
+    'integer': Integer,
+    'string': String,
+    'null': Null,
+    'array': Array,
+    'boolean': Boolean
+}
