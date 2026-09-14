@@ -28,10 +28,12 @@ def call_me_maybe(
     # print("\033[H\033[2J")
     print("\n\033[0;32m===================\033[0m")
     print(f"\033[0;33muser:\033[0m {msg}\n")
-    print("\033[s\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    print("\033[s")
+    print("\n" * 15, end="")
+    print("\033[u", end="")
 
-    def _error_message(e: str) -> str:
-        return {"name": "_ERROR","parameters": {"comment": f"{e}"}}
+    def _error_message(e: Any) -> str:
+        return str({"name": "_ERROR", "parameters": {"comment": f"{e}"}})
 
     def _search_variable(
             token: list[int],
@@ -143,7 +145,7 @@ def call_me_maybe(
         print(e)
         sys.exit(-1)
 
-    def set_prompt(msg: str, ft_list: list[int]) -> Any:
+    def set_prompt(msg: str, ft_list: Any) -> Any:
 
         ex = '{"name": name,"parameters": {"key": value}}'
         prompt = f"""
@@ -207,7 +209,7 @@ def call_me_maybe(
         return json.loads(model.decode(output_token))
 
     token = set_prompt(msg, function_selected)
-    token+=output_token
+    token += output_token
 
     type_parameter = [i for i in parameter]
     _put_value(output_token, token, ', "parameters": {')
@@ -234,7 +236,8 @@ def call_me_maybe(
                     validator_value[k[i]['type']].model_validate(x)
 
                 except ValidationError as e:
-                    print(f"\033[u\033[2K\033[u{json.dumps(_error_message(e))}")
+                    b = "\033[u\033[2K\033[u"
+                    print(f"{b}{json.dumps(_error_message(e))}")
                     return _error_message(e)
 
             print(f"\033[u\033[2K\033[u{json.dumps(output_final, indent=2)}")
@@ -263,5 +266,5 @@ def call_me_maybe(
     try:
         return json.loads(model.decode(output_token))
     except Exception as e:
-            print(f"\033[u{json.dumps(_error_message(e))}")
-            return _error_message(e)
+        print(f"\033[u{json.dumps(_error_message(e))}")
+        return _error_message(e)
