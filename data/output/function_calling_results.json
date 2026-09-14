@@ -62,7 +62,7 @@
     "name": "fn_substitute_string_with_regex",
     "parameters": {
       "source_string": "Hello 34 I'm 233 years old",
-      "regex": "([0-9]+)",
+      "regex": "(\\d+)",
       "replacement": "NUMBERS"
     }
   },
@@ -71,7 +71,7 @@
     "name": "fn_substitute_string_with_regex",
     "parameters": {
       "source_string": "Programming is fun",
-      "regex": "([aeiou])",
+      "regex": "([aeiouAEIOU])",
       "replacement": "*"
     }
   },

@@ -1,7 +1,7 @@
 [project]
 name = "call-me-maybe"
 version = "0.1.0"
-description = "Add your description here"
+description = "this is my implementation of call_me_maybe"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

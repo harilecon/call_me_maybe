@@ -160,7 +160,6 @@ and anstr as value")
         final.append(prompt)
         try:
             with open(argument['output'], 'w') as file:
-                print(json.dumps(prompt, indent=2))
                 json.dump(final, file, indent=2)
 
         except OSError as e:

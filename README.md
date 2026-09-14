@@ -36,6 +36,7 @@ For this project, we use **Qwen/Qwen3-0.6B**, a lightweight language model, as t
 ## Instructions
 
 ```shell
+# for 42 student export your cache to the goinfre
 mkdir ~/goinfre/huggingface ~/goinfre/uv_cache ~/goinfre/uv_venv
 export HF_HOME=~/goinfre/huggingface
 export UV_CACHE_DIR=~/goinfre/uv_cache
@@ -54,8 +55,24 @@ export UV_PROJECT_ENVIRONMENT=~/goinfre/uv_venv
 The configuration file must be a valid JSON file.
 Each function definition must contain at least the following fields:
 
+
+
+
+### Fields
+
+| Field         | Type             | Description                            |
+| ------------- | ---------------- | -------------------------------------- |
+| `name`        | `string`         | Name of the function.                  |
+| `description` | `string`         | Description of what the function does. |
+| `parameters`  | `number \| integer \| array \| bool \| null` | Parameters expected by the function.   |
+| `returns`     | `number \| integer \| array \| bool \| null` | Value returned by the function.        |
+
+`parameters` and `returns` can be set to `null` when the function does not require parameters or does not return a value.
+
+### Example
+
 ```json
-  {
+{
     "name": "fn_add_numbers",
     "description": "Add two numbers together and return their sum.",
     "parameters": {
@@ -69,29 +86,6 @@ Each function definition must contain at least the following fields:
     "returns": {
       "type": "number"
     }
-  }
-```
-
-### Fields
-
-| Field         | Type             | Description                            |
-| ------------- | ---------------- | -------------------------------------- |
-| `name`        | `string`         | Name of the function.                  |
-| `description` | `string`         | Description of what the function does. |
-| `parameters`  | `object \| null` | Parameters expected by the function.   |
-| `returns`     | `object \| null` | Value returned by the function.        |
-
-`parameters` and `returns` can be set to `null` when the function does not require parameters or does not return a value.
-
-### Example
-
-```json
-{
-    "name": "fn_reboot",
-    "description": "Reboot a server whenever an event occurs",
-    "parameters": null,
-    "returns": null
-}
 ```
 
 The `name` and `description` fields are required. `parameters` and `returns` must also be present, but their value can be `null`.
@@ -99,11 +93,11 @@ The `name` and `description` fields are required. `parameters` and `returns` mus
 
 ```shell
 # clone the repos
-git clone https://github.com/harilecon/call_me_maybe.git
+git clone git@vogsphere.42antananarivo.mg:vogsphere/intra-uuid-2d500722-81dc-42c5-9072-a38ebe0b6a88-7598026-tsitoand call_me_maybe
 ```
 
 ```shell
-# install dependency
+# install dependency 
 make install
 ```
 
@@ -125,7 +119,7 @@ make lint-strict
 * YouTube videos — Additional video resources related to the project.
 * [Hugging Face](https://huggingface.co/) — Resources and models used for the project.
 * [Astral UV Documentation](https://docs.astral.sh/uv/) — Learn how to install, use, and understand uv.
-* google collab: where i tested my code
+* google colab: where i tested my code
 
 
 #### AI Usage
@@ -165,7 +159,7 @@ Using the prompt to inject the function definitions consumed a significant amoun
 
 I also tried modifying the prompt dynamically once the function name had been identified. However, the LLM immediately started hallucinating instead of continuing with the expected parameter generation.
 
-On a test set of 106 prompts, the LLM correctly identified the function in 104 cases, with 2 errors. The function-selection accuracy was therefore approximately 98.1%.
+On a test set of 106 prompts, the LLM correctly identified the function in 104 cases, with 2 errors. The function-selection accuracy was therefore approximately 98%.
 
 These results show that the approach is relatively reliable for function selection, but injecting all function definitions into the prompt remains expensive in terms of token generation and computation.
 
@@ -194,12 +188,13 @@ graph TD
     B --> C[Consistent Function Schema]
     C --> D[LLM Generation]
     D --> E[JSON Validation]
-    E --> F[Pydantic Validation]
-    F --> G[Validated Function Call]
+    E --> F[Parameter Validation]
+    F --> G[Pydantic Validation]
+    G --> H[Validated Function Call]
 ```
 ### Example usage
 ```shell
-$ uv run --python 3.12.5 python -m src --input my_test_call.json --output drive/MyDrive/final.json --functions_definition my_function_definition.json --llm Qwen/Qwen3-0.6B
+uv run --python 3.12.5 python -m src --input my_test_call.json --output drive/MyDrive/final.json --functions_definition my_function_definition.json --llm Qwen/Qwen3-0.6B
 ```
 
 

@@ -1,4 +1,4 @@
-PYTHON = uv run uv run --python 3.12.5 python
+PYTHON = uv run --python 3.12.5 python
 MYPY_FLAGS = --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 FILE = src
 

@@ -25,6 +25,14 @@ def call_me_maybe(
     Returns:
         A dictionary containing the selected function name and its parameters.
     """
+    # print("\033[H\033[2J")
+    print("\n\033[0;32m===================\033[0m")
+    print(f"\033[0;33muser:\033[0m {msg}\n")
+    print("\033[s\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+
+    def _error_message(e: str) -> str:
+        return {"name": "_ERROR","parameters": {"comment": f"{e}"}}
+
     def _search_variable(
             token: list[int],
             output_token: list[int],
@@ -32,7 +40,7 @@ def call_me_maybe(
             ) -> tuple[list[int], list[int]]:
 
         for _ in range(20):
-
+            print(f"\033[u\033[2K\033[u{model.decode(output_token)}")
             ids = model.get_logits_from_input_ids(token)
 
             next = ids.index(max(ids))
@@ -87,9 +95,9 @@ def call_me_maybe(
         token: list[int],
         output_token: list[int],
         constraint: list[int],
-        tab_name_tokenised: list[list[int]],
     ) -> tuple[list[int], list[int]] | None:
         for _ in range(20):
+            print(f"\033[u{model.decode(output_token)}")
 
             ids = model.get_logits_from_input_ids(token)
 
@@ -137,13 +145,12 @@ def call_me_maybe(
 
     def set_prompt(msg: str, ft_list: list[int]) -> Any:
 
-        ex = '{"name": "fn_add_numbers","parameters": {"a": 2.0, "b": 3.5}}'
+        ex = '{"name": name,"parameters": {"key": value}}'
         prompt = f"""
         Select the appropriate function from the available functions
         and extract its arguments from the user's request.
         Available functions: {ft_list}
         Example:
-        User request: 'what's the sum of 2,0 and 3,5'
         Output: {ex}
         User request: {msg}
         Output:"""
@@ -160,16 +167,14 @@ def call_me_maybe(
     token = set_prompt(msg, ft_list)
 
     _put_value(output_token, token, '{"name": "')
-
+    print('\033[u{"name": "')
     name_found = _search_name(
         token,
         output_token,
-        name,
-        table_name_tokenised
+        name
         )
 
     if not name_found:
-        print("error on name research")
         return None
 
     token, output_token = name_found
@@ -192,6 +197,8 @@ def call_me_maybe(
             "comment": "no function selected"
                 }
             }
+    # print(json.dumps(function_selected, indent=2))
+    # sys.exit(0)
 
     parameter = function_selected['parameters']
 
@@ -199,12 +206,15 @@ def call_me_maybe(
         _put_value(output_token, token, ', "parameters": null}')
         return json.loads(model.decode(output_token))
 
+    token = set_prompt(msg, function_selected)
+    token+=output_token
+
     type_parameter = [i for i in parameter]
     _put_value(output_token, token, ', "parameters": {')
 
     for i in range(len(type_parameter)):
         _put_value(output_token, token, f'"{type_parameter[i]}":')
-
+        print(f"\033[u\033[2K\033[um{model.decode(output_token)}")
         token, output_token = _search_variable(
             token,
             output_token,
@@ -222,14 +232,12 @@ def call_me_maybe(
                     x = {'value': output_final["parameters"][i]}
 
                     validator_value[k[i]['type']].model_validate(x)
-                except ValidationError as e:
-                    return {
-                        "name": "_ERROR",
-                        "parameters": {
-                            "comment": f"{e}"
-                                }
-                        }
 
+                except ValidationError as e:
+                    print(f"\033[u\033[2K\033[u{json.dumps(_error_message(e))}")
+                    return _error_message(e)
+
+            print(f"\033[u\033[2K\033[u{json.dumps(output_final, indent=2)}")
             return output_final
 
         except Exception:
@@ -250,18 +258,10 @@ def call_me_maybe(
                     ...
 
         except TypeError as e:
-            return {
-                "name": "_ERROR",
-                "parameters": {
-                    "comment": f"{e}"
-                    }
-                }
+            print(f"\033[u\033[2K\033[u{json.dumps(_error_message(e))}")
+            return _error_message(e)
     try:
         return json.loads(model.decode(output_token))
     except Exception as e:
-        return {
-         "name": "_ERROR",
-         "parameters": {
-            "comment": f"{e}"
-            }
-        }
+            print(f"\033[u{json.dumps(_error_message(e))}")
+            return _error_message(e)
