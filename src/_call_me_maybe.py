@@ -32,8 +32,8 @@ def call_me_maybe(
     print("\n" * 15, end="")
     print("\033[u", end="")
 
-    def _error_message(e: Any) -> str:
-        return str({"name": "_ERROR", "parameters": {"comment": f"{e}"}})
+    def _error_message(e: Any) -> Any:
+        return {"name": "_ERROR", "parameters": {"comment": f"{e}"}}
 
     def _search_variable(
             token: list[int],
@@ -150,6 +150,7 @@ def call_me_maybe(
         ex = '{"name": name,"parameters": {"key": value}}'
         prompt = f"""
         Select the appropriate function from the available functions
+        based on the definition
         and extract its arguments from the user's request.
         Available functions: {ft_list}
         Example:
@@ -208,8 +209,8 @@ def call_me_maybe(
         _put_value(output_token, token, ', "parameters": null}')
         return json.loads(model.decode(output_token))
 
-    token = set_prompt(msg, function_selected)
-    token += output_token
+    # token = set_prompt(msg, function_selected)
+    # token += output_token
 
     type_parameter = [i for i in parameter]
     _put_value(output_token, token, ', "parameters": {')
@@ -227,18 +228,32 @@ def call_me_maybe(
             txt = ast.literal_eval(str(model.decode(output_token)))
             output_final = json.loads(json.dumps(txt))
 
-            k = function_selected['parameters']
+            key = function_selected['parameters']
 
-            for i in k:
+            for i in key:
                 try:
                     x = {'value': output_final["parameters"][i]}
 
-                    validator_value[k[i]['type']].model_validate(x)
+                    validator_value[key[i]['type']].model_validate(x)
 
                 except ValidationError as e:
                     b = "\033[u\033[2K\033[u"
                     print(f"{b}{json.dumps(_error_message(e))}")
                     return _error_message(e)
+
+            for i in key:
+                if key[i]['type'] == 'integer':
+                    output_final['parameters'].update(
+                        {
+                            i: float(int(output_final['parameters'][i]))
+                            }
+                            )
+                elif key[i]['type'] == 'number':
+                    output_final['parameters'].update(
+                        {
+                            i: float(output_final['parameters'][i])
+                            }
+                            )
 
             print(f"\033[u\033[2K\033[u{json.dumps(output_final, indent=2)}")
             return output_final

@@ -129,7 +129,7 @@ contain a list of prompt objects")
 
         if not isinstance(prompt['prompt'], str):
             print("invalid entry must be a json with key \"prompt\" \
-and anstr as value")
+and a str as value")
             print(prompt)
             continue
 
