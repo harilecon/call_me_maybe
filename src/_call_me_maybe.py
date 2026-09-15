@@ -25,11 +25,9 @@ def call_me_maybe(
     Returns:
         A dictionary containing the selected function name and its parameters.
     """
-    # print("\033[H\033[2J")
     print("\n\033[0;32m===================\033[0m")
     print(f"\033[0;33muser:\033[0m {msg}\n")
     print("\033[s")
-    print("\n" * 15, end="")
     print("\033[u", end="")
 
     def _error_message(e: Any) -> Any:
@@ -200,17 +198,12 @@ def call_me_maybe(
             "comment": "no function selected"
                 }
             }
-    # print(json.dumps(function_selected, indent=2))
-    # sys.exit(0)
 
     parameter = function_selected['parameters']
 
     if not parameter:
         _put_value(output_token, token, ', "parameters": null}')
         return json.loads(model.decode(output_token))
-
-    # token = set_prompt(msg, function_selected)
-    # token += output_token
 
     type_parameter = [i for i in parameter]
     _put_value(output_token, token, ', "parameters": {')
@@ -245,7 +238,7 @@ def call_me_maybe(
                 if key[i]['type'] == 'integer':
                     output_final['parameters'].update(
                         {
-                            i: float(int(output_final['parameters'][i]))
+                            i: int(output_final['parameters'][i])
                             }
                             )
                 elif key[i]['type'] == 'number':

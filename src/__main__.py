@@ -170,4 +170,4 @@ if __name__ == '__main__':
     try:
         call_me()
     except KeyboardInterrupt:
-        print("\nOk the boss")
+        print("\nOk boss")
