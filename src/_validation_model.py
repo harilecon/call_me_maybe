@@ -1,6 +1,7 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Annotated, Any
 from enum import Enum
+import string
 
 
 class AllowedValue(Enum):
@@ -31,6 +32,21 @@ class MyFuctionDefinition(BaseModel):
     description: Annotated[str, Field(..., min_length=10)]
     parameters: Annotated[dict[str, Any] | None, Field(...)]
     returns: Annotated[dict[str, Any] | None, Field(...)]
+
+    @field_validator('name')
+    @classmethod
+    def funtion_name(cls, value: str) -> str:
+        start = string.ascii_letters + '_'
+        if value[0] not in start:
+            raise ValueError(f"should start with ascii letter of '_' {value}")
+        elif ' ' in value:
+            raise ValueError('invalid name')
+        punctuation = string.punctuation.replace('_', '')
+        for _ in value:
+            if _ in punctuation:
+                raise ValueError(f"can't contain punctuation {value}")
+
+        return value
 
 
 class ValidateParameter(BaseModel):
