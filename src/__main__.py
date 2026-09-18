@@ -44,6 +44,9 @@ def call_me() -> None:
         with open(argument['functions_definition'], 'r') as f:
             functions_definition = json.load(f)
 
+            if len(functions_definition) == 0:
+                raise ValueError("json should contain funtion definition")
+
         if not isinstance(functions_definition, list):
             raise ValueError("the function definition file must \
 contain a list of functions")
@@ -82,6 +85,9 @@ must be a JSON object")
     try:
         with open(argument['input'], 'r') as f:
             prompt_file = json.load(f)
+
+            if len(prompt_file) == 0:
+                raise ValueError("json should contain prompt")
 
             if not isinstance(prompt_file, list):
                 raise ValueError("the prompt file must \
