@@ -44,9 +44,9 @@ class MyFuctionDefinition(BaseModel):
     @field_validator('name')
     @classmethod
     def _funtion_name(cls, value: str) -> str:
-        start = string.ascii_letters + '_'
+        start = string.ascii_letters
         if value[0] not in start:
-            raise ValueError(f"should start with ascii letter of '_' {value}")
+            raise ValueError(f"should start with ascii let {value}")
         elif ' ' in value:
             raise ValueError('invalid name')
         punctuation = string.punctuation.replace('_', '')
