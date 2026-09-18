@@ -202,8 +202,10 @@ uv run --python 3.12.5 python -m src --input my_test_call.json --output drive/My
 * Qwen/Qwen3-0.6B
 * Qwen/Qwen3-1.7B
 * HuggingFaceTB/SmolLM2-1.7B-Instruct
-* uggingFaceTB/SmolLM2-360M-Instruct
+* HuggingFaceTB/SmolLM2-360M-Instruct
 * ibm-granite/granite-3.3-2b-instruct
+* SmolLM2-360M
+* distilgpt2
 
 
 #### other LLM 
