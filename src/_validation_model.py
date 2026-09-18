@@ -1,7 +1,14 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import Annotated, Any
 from enum import Enum
 import string
+
+
+class PromptValidator(BaseModel):
+    """Define the structure of prompt."""
+
+    model_config = ConfigDict(extra='forbid')
+    prompt: Annotated[str, Field(...)]
 
 
 class AllowedValue(Enum):
@@ -28,6 +35,7 @@ class MyFuctionDefinition(BaseModel):
             if the function does not return a value.
     """
 
+    model_config = ConfigDict(extra='forbid')
     name: Annotated[str, Field(..., min_length=3)]
     description: Annotated[str, Field(..., min_length=10)]
     parameters: Annotated[dict[str, Any] | None, Field(...)]
@@ -69,6 +77,7 @@ class MyFunctionCall(BaseModel):
             function does not require parameters.
     """
 
+    model_config = ConfigDict(extra='forbid')
     prompt: Annotated[str, Field(...)]
     name: Annotated[str, Field(...)]
     parameters: Annotated[dict[str, Any] | None, Field(...)]

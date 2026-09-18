@@ -8,7 +8,8 @@ from ._call_me_maybe import call_me_maybe
 from ._parse_input_parameter import parse_input
 from ._validation_model import (MyFuctionDefinition,
                                 MyFunctionCall,
-                                ValidateParameter)
+                                ValidateParameter,
+                                PromptValidator)
 from pydantic import ValidationError
 from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 import json
@@ -85,6 +86,9 @@ must be a JSON object")
             if not isinstance(prompt_file, list):
                 raise ValueError("the prompt file must \
 contain a list of prompt objects")
+
+            for _ in prompt_file:
+                PromptValidator(**_)
 
     except json.decoder.JSONDecodeError as e:
         print("json invalid for the prompt")
