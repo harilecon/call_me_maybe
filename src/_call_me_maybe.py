@@ -27,7 +27,6 @@ def call_me_maybe(
     """
     print("\n\033[0;32m===================\033[0m")
     print(f"\033[0;33muser:\033[0m {msg}\n")
-    print("\033[s")
 
     def _error_message(e: Any) -> Any:
         return {"name": "_ERROR", "parameters": {"comment": f"{e}"}}
@@ -39,7 +38,7 @@ def call_me_maybe(
             ) -> tuple[list[int], list[int]]:
 
         for _ in range(20):
-            print(f"\033[u\033[2K\033[u{model.decode(output_token)}")
+            print(f"\033[2K{model.decode(output_token)}", end="\r", flush=True)
             ids = model.get_logits_from_input_ids(token)
 
             next = ids.index(max(ids))
@@ -96,7 +95,7 @@ def call_me_maybe(
         constraint: list[int],
     ) -> tuple[list[int], list[int]] | None:
         for _ in range(20):
-            print(f"\033[u{model.decode(output_token)}")
+            print(f"\033[2K{model.decode(output_token)}", end="\r", flush=True)
 
             ids = model.get_logits_from_input_ids(token)
 
@@ -167,7 +166,7 @@ def call_me_maybe(
     token = set_prompt(msg, ft_list)
 
     _put_value(output_token, token, '{"name": "')
-    print('\033[u{"name": "')
+    print('{"name": "', end="\r", flush=True)
     name_found = _search_name(
         token,
         output_token,
@@ -176,7 +175,7 @@ def call_me_maybe(
 
     if not name_found:
         _ = _error_message("no function selected")
-        print(f"\033[u{_}")
+        print(f"{_}",  end="\r", flush=True)
         return _
 
     token, output_token = name_found
@@ -194,14 +193,14 @@ def call_me_maybe(
 
     if not function_selected:
         _ = _error_message("no function selected")
-        print(f"\033[u{_}")
+        print(f"{_}",  end="\r", flush=True)
         return _
 
     parameter = function_selected['parameters']
 
     if not parameter:
         _put_value(output_token, token, ', "parameters": null}')
-        print(f"\033[u\033[2K\033[u{model.decode(output_token)}")
+        print(f"\033[2K{model.decode(output_token)}",  end="\r", flush=True)
         return json.loads(model.decode(output_token))
 
     type_parameter = [i for i in parameter]
@@ -209,7 +208,7 @@ def call_me_maybe(
 
     for i in range(len(type_parameter)):
         _put_value(output_token, token, f'"{type_parameter[i]}":')
-        print(f"\033[u\033[2K\033[u{model.decode(output_token)}")
+        print(f"\033[2K{model.decode(output_token)}",  end="\r", flush=True)
         token, output_token = _search_variable(
             token,
             output_token,
@@ -229,8 +228,8 @@ def call_me_maybe(
                     validator_value[key[i]['type']].model_validate(x)
 
                 except ValidationError as e:
-                    b = "\033[u\033[2K\033[u"
-                    print(b, _error_message(e))
+                    b = "\033[2K"
+                    print(b, _error_message(e),  end="\r", flush=True)
                     return _error_message(e)
 
             for i in key:
@@ -247,7 +246,7 @@ def call_me_maybe(
                             }
                             )
 
-            print(f"\033[u\033[2K\033[u{output_final}")
+            print(f"\033[2K{output_final}", end="\r", flush=True)
             return output_final
 
         except Exception:
@@ -268,10 +267,10 @@ def call_me_maybe(
                     ...
 
         except TypeError as e:
-            print(f"\033[u\033[2K\033[u{_error_message(e)}")
+            print(f"\033[2K{_error_message(e)}", end="\r", flush=True)
             return _error_message(e)
     try:
         return json.loads(model.decode(output_token))
     except Exception as e:
-        print(f"\033[u{_error_message(e)}")
+        print(f"{_error_message(e)}", end="\r", flush=True)
         return _error_message(e)

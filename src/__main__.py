@@ -160,6 +160,7 @@ and a str as value")
 
             prompt.update(your_call)
             validate = MyFunctionCall(**prompt)
+            print()
         except ValidationError as e:
             print("error on validation of the returned function call")
             print(f"prompt = \"{prompt}\"")
