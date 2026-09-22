@@ -167,6 +167,17 @@ and a str as value")
             print("got from the llm:")
             print(prompt)
             print(e)
+        except Exception as e:
+            your_call = {
+                "name": "_ERROR",
+                "parameters": {
+                    "comment": f"{e}"
+                    }
+            }
+            prompt.update(your_call)
+            validate = MyFunctionCall(**prompt)
+            print()
+
         prompt.update(validate)
         final.append(prompt)
         try:
