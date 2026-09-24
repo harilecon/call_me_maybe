@@ -1,35 +1,113 @@
 [
-  {
-    "prompt": "What is the sum of 2 and 3?"
-  },
-  {
-    "prompt": "What is the sum of 265 and 345?"
-  },
-  {
-    "prompt": "Greet shrek"
-  },
-  {
-    "prompt": "Greet john"
-  },
-  {
-    "prompt": "Reverse the string 'hello'"
-  },
-  {
-    "prompt": "Reverse the string 'world'"
-  },
-  {
-    "prompt": "What is the square root of 16?"
-  },
-  {
-    "prompt": "Calculate the square root of 144"
-  },
-  {
-    "prompt": "Replace all numbers in \"Hello 34 I'm 233 years old\" with NUMBERS"
-  },
-  {
-    "prompt": "Replace all vowels in 'Programming is fun' with asterisks"
-  },
-  {
-    "prompt": "Substitute the word 'cat' with 'dog' in 'The cat sat on the mat with another cat'"
-  }
+  {"prompt": "Reverse the string 'hello'."},
+  {"prompt": "Reverse the string 'Hello World'."},
+  {"prompt": "Reverse the string ''."},
+  {"prompt": "Reverse the string ' '."},
+  {"prompt": "Reverse the string '     '."},
+  {"prompt": "Reverse the string '12345'."},
+  {"prompt": "Reverse the string '123abc'."},
+  {"prompt": "Reverse the string 'abc123'."},
+  {"prompt": "Reverse the string 'hello hello'."},
+  {"prompt": "Reverse the string 'a b c'."},
+  {"prompt": "Reverse the string '!@#$%'."},
+  {"prompt": "Reverse the string 'hello-world'."},
+  {"prompt": "Reverse the string 'hello_world'."},
+  {"prompt": "Reverse the string 'hello\\nworld'."},
+  {"prompt": "Reverse the string 'hello\\tworld'."},
+
+  {"prompt": "Concatenate 'hello' and 'world'."},
+  {"prompt": "Concatenate '' and 'hello'."},
+  {"prompt": "Concatenate 'hello' and ''."},
+  {"prompt": "Concatenate two empty strings."},
+  {"prompt": "Concatenate 'hello ' and 'world'."},
+  {"prompt": "Concatenate '123' and '456'."},
+  {"prompt": "Concatenate 'NaN' and 'inf'."},
+  {"prompt": "Concatenate 'null' and 'undefined'."},
+  {"prompt": "Concatenate 'hello' and '😀'."},
+
+  {"prompt": "Convert 'hello' to uppercase."},
+  {"prompt": "Convert 'HELLO' to lowercase."},
+  {"prompt": "Convert 'HeLLo WoRLd' to lowercase."},
+  {"prompt": "Convert 'hello world' to uppercase."},
+  {"prompt": "Convert '' to uppercase."},
+  {"prompt": "Convert '12345' to uppercase."},
+
+  {"prompt": "Find the length of 'hello'."},
+  {"prompt": "Find the length of ''."},
+  {"prompt": "Find the length of '     '."},
+  {"prompt": "Find the length of 'hello world'."},
+  {"prompt": "Find the length of '😀😀😀'."},
+  {"prompt": "Find the length of 'éèêë'."},
+
+  {"prompt": "Remove spaces from 'hello world'."},
+  {"prompt": "Remove spaces from '  hello world  '."},
+  {"prompt": "Remove spaces from 'hello     world'."},
+  {"prompt": "Remove spaces from '     '."},
+  {"prompt": "Trim the string '   hello   '."},
+  {"prompt": "Trim the string '     '."},
+  {"prompt": "Trim the string ''."},
+
+  {"prompt": "Replace 'hello' with 'hi' in 'hello world'."},
+  {"prompt": "Replace 'a' with 'b' in 'aaaa'."},
+  {"prompt": "Replace 'hello' with '' in 'hello world'."},
+  {"prompt": "Replace '' with 'x' in 'hello'."},
+  {"prompt": "Replace 'x' with 'y' in ''."},
+
+  {"prompt": "Check whether 'hello' contains 'ell'."},
+  {"prompt": "Check whether 'hello' contains 'xyz'."},
+  {"prompt": "Check whether '' contains ''."},
+  {"prompt": "Check whether 'hello world' contains ' '."},
+  {"prompt": "Check whether '12345' contains '23'."},
+
+  {"prompt": "Compare 'hello' and 'hello'."},
+  {"prompt": "Compare 'hello' and 'Hello'."},
+  {"prompt": "Compare '' and ''."},
+  {"prompt": "Compare 'abc' and 'abd'."},
+  {"prompt": "Compare '123' and '123'."},
+
+  {"prompt": "Repeat the string 'hello' 3 times."},
+  {"prompt": "Repeat the string 'a' 100 times."},
+  {"prompt": "Repeat the string '' 10 times."},
+  {"prompt": "Repeat the string '😀' 5 times."},
+
+  {"prompt": "Get the first character of 'hello'."},
+  {"prompt": "Get the last character of 'hello'."},
+  {"prompt": "Get the first character of ''."},
+  {"prompt": "Get the last character of ''."},
+  {"prompt": "Get the character at position 0 in 'hello'."},
+  {"prompt": "Get the character at position 100 in 'hello'."},
+  {"prompt": "Get the character at position -1 in 'hello'."},
+
+  {"prompt": "Split 'hello world' into words."},
+  {"prompt": "Split 'a,b,c' using ','."},
+  {"prompt": "Split '' using ','."},
+  {"prompt": "Split 'hello' using an empty separator."},
+  {"prompt": "Join 'hello', 'world', and '!' with a space."},
+
+  {"prompt": "Is '12345' a valid number string?"},
+  {"prompt": "Is '12.34' a valid number string?"},
+  {"prompt": "Is 'NaN' a valid number string?"},
+  {"prompt": "Is 'inf' a valid number string?"},
+  {"prompt": "Is '-inf' a valid number string?"},
+  {"prompt": "Is 'hello' a valid number string?"},
+  {"prompt": "Convert the string '123' to a number."},
+  {"prompt": "Convert the string '12.34' to a number."},
+  {"prompt": "Convert the string 'NaN' to a number."},
+  {"prompt": "Convert the string 'inf' to a number."},
+
+  {"prompt": "Reverse '😀😃😄😁'."},
+  {"prompt": "Reverse '你好世界'."},
+  {"prompt": "Reverse 'こんにちは'."},
+  {"prompt": "Reverse 'éèêë'."},
+  {"prompt": "Convert 'éèêë' to uppercase."},
+  {"prompt": "Convert 'ß' to uppercase."},
+  {"prompt": "Convert 'İ' to lowercase."},
+
+  {"prompt": "Reverse the string 'hello\"world'."},
+  {"prompt": "Reverse the string 'hello\\world'."},
+  {"prompt": "Reverse the string '<script>alert(1)</script>'."},
+  {"prompt": "Reverse the string '{\"key\":\"value\"}'."},
+  {"prompt": "Reverse the string '[1,2,3]'."},
+  {"prompt": "Reverse the string 'null'."},
+  {"prompt": "Reverse the string 'undefined'."}
 ]
