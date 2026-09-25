@@ -56,11 +56,15 @@ def parse_input() -> ParseResult:
     )
 
     argument = parse.parse_args()
+    output = argument.output
+
+    if not output.endswith(".json"):
+        output = output + ".json"
 
     return {
         'functions_definition': argument.functions_definition,
         'input': argument.input,
-        'output': argument.output,
+        'output': output,
         'llm': argument.llm
             }
 
