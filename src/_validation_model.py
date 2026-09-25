@@ -64,6 +64,7 @@ class ValidateParameter(BaseModel):
         type: allowed type of parameter value define on  AllowedValue
     """
 
+    model_config = ConfigDict(extra='forbid')
     type: AllowedValue
 
 
